@@ -7,46 +7,135 @@
       "status": "in-development",
       "statusNote": "Post-jam version in development",
       "title": "ONE MORE SPIN",
-      "tagline": "A roulette roguelike built in 6 days for a game jam – now growing into a full game.",
-      "categories": ["Programming", "Game Design"],
-      "tech": ["Godot 4", "GDScript"],
+      "tagline": "Roulette meets roguelike. Made in 6 days for a game jam and now in post-jam development.",
+      "categories": [
+        "Programming",
+        "Game Design"
+      ],
+      "tech": [
+        "Godot 4",
+        "GDScript"
+      ],
       "facts": {
-        "role": "Programming & Game Design – work split 50/50, both of us worked on every area",
+        "role": "Programming and game design. We split the work 50/50 and both worked on every part.",
         "team": "2 (with CuzImMarrc)",
         "duration": "6 days (jam) + ongoing post-jam development",
         "engine": "Godot 4",
         "tools": "GDScript, Git/GitHub",
         "year": "2026",
-        "context": "Game Jam – The Very Serious Juniper Dev Game Jam"
+        "context": "Game jam (The Very Serious Juniper Dev Game Jam)"
       },
       "media": {
-        "cover": { "src": "assets/one-more-spin/gameplay-win.webp", "alt": "ONE MORE SPIN gameplay: roulette table with a +130 payout popping over the wheel", "pixel": true },
+        "cover": {
+          "src": "assets/one-more-spin/gameplay-win.webp",
+          "alt": "ONE MORE SPIN gameplay: roulette table with a +130 payout popping over the wheel",
+          "pixel": true
+        },
         "loop": "",
-        "video": { "youtubeId": "" },
+        "video": {
+          "youtubeId": ""
+        },
         "gallery": [
-          { "src": "assets/one-more-spin/gameplay-win.webp", "alt": "A winning spin with a +130 payout, quota and round tracker on the right", "pixel": true },
-          { "src": "assets/one-more-spin/gameplay-result.webp", "alt": "The ball lands on 34 – chips placed on red and on single numbers", "pixel": true },
-          { "src": "assets/one-more-spin/shop.webp", "alt": "Between-round shop with relics and chip upgrades bought with coins", "pixel": true },
-          { "src": "assets/one-more-spin/main-menu.webp", "alt": "Main menu with Play, Options and Quit", "pixel": true },
-          { "src": "assets/one-more-spin/cover-itch.webp", "alt": "ONE MORE SPIN cover art with roulette wheel and casino chips", "pixel": true }
+          {
+            "src": "assets/one-more-spin/gameplay-win.webp",
+            "alt": "A winning spin with a +130 payout, quota and round tracker on the right",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/gameplay-result.webp",
+            "alt": "The ball lands on 34, with chips on red and on single numbers",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/shop.webp",
+            "alt": "Between-round shop with relics and chip upgrades bought with coins",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/main-menu.webp",
+            "alt": "Main menu with Play, Options and Quit",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/cover-itch.webp",
+            "alt": "ONE MORE SPIN cover art with roulette wheel and casino chips",
+            "pixel": true
+          }
         ]
       },
-      "overview": "ONE MORE SPIN turns European roulette into a roguelike. Each round gives you a limited number of spins to reach a score quota; you place chips on numbers and outside bets, cash in on the result and spend coins in a shop on relics and chip upgrades that bend the odds. The jam themes were \"Spin to Win\" and \"Very Serious\". We built the jam version in six days as a team of two and are now developing it further.",
+      "overview": "ONE MORE SPIN turns European roulette into a roguelike. Every round you get a few spins to reach a score quota. You place chips on numbers and outside bets, and between rounds you spend coins in a shop on relics and chip upgrades that change your odds. The jam themes were \"Spin to Win\" and \"Very Serious\". We built the jam version in six days as a team of two and kept working on it after the jam.",
       "built": [
-        "GameManager singleton that owns the game state: rounds, spins, quota, coins and progression",
-        "Bet system based on a list of active bets, so any number of chips can be placed and resolved independently per spin",
-        "Drag-and-drop chip placement on the betting table, with correct layering while dragging",
-        "Animated feedback with Tweens: payout popups, a quota counter that counts up, overlays chained via callbacks",
-        "Between-round shop with relics and chip upgrades",
-        "Options menu with music/SFX sliders on separate audio buses, saved with ConfigFile and reachable from main menu and pause menu"
+        "GameManager singleton that keeps track of rounds, spins, quota, coins and progression",
+        "Bet system that stores all active bets in a list, so you can place as many chips as you like and each one is resolved on its own",
+        "Drag and drop for placing chips on the table",
+        "Animated feedback with Tweens, like payout popups and a quota counter that counts up",
+        "Shop between rounds with relics and chip upgrades",
+        "Options menu with separate music and SFX volume, saved with ConfigFile and reachable from the main menu and the pause menu"
       ],
-      "challenge": "Our first version updated the UI the moment a spin was resolved, so numbers changed before the animations had played – the game felt out of sync and the round sometimes advanced too early. We separated game state from presentation: the state updates immediately, but the labels only change at the end of each Tween, and the next step (overlay, win sound, next round) is triggered by a callback when the animation is done. That made every spin read clearly and fixed the round-counting bugs along the way.",
-      "differently": "Roulette produces only one number per spin, so there are just a handful of things that can trigger. Games like Balatro feel exciting because rewards cascade one after another. For the post-jam version I'm designing modifiers that each trigger on their own, so late-game spins build up into a chain of escalating feedback instead of a single payout.",
+      "challenge": "In our first version the UI updated the moment a spin was resolved. The numbers changed before the animations had even played, so the game felt out of sync and sometimes jumped to the next round too early. We fixed this by separating the game state from what is shown on screen. The state updates right away, but the labels only change once a Tween has finished, and the next step (overlay, win sound, next round) is started by a callback at the end of the animation. Spins became much easier to follow and a few round counting bugs disappeared along the way.",
+      "differently": "Roulette only gives you one number per spin, so there aren't many things that can trigger at once. In games like Balatro a good hand sets off a long chain of effects, and that is a big part of why they feel so satisfying. For the post-jam version I'm working on modifiers that each trigger separately, so a strong late-game spin turns into a chain of payouts instead of one big number.",
       "links": {
         "play": "https://opniki.itch.io/one-more-spin",
         "code": "",
         "download": "",
         "video": ""
+      },
+      "devlog": [
+        {
+          "when": "Setup",
+          "title": "Engine, repo and structure",
+          "text": "We picked Godot because its scene files are plain text, which makes working on the same project with Git much easier for two people. Then we set up a GitHub repo, a shared folder structure and an empty GameManager so both of us started from the same base."
+        },
+        {
+          "when": "Core loop",
+          "title": "GameManager and first playable spin",
+          "text": "The GameManager became an autoload with spin(), place_bet() and resolve_bet(). Early on we decided that it only holds data and every UI element updates itself. That kept scene changes simple and the code easy to follow."
+        },
+        {
+          "when": "Look",
+          "title": "Pixel art and layout",
+          "text": "We drew our own 32×32 chip sprites, set up pixel-perfect import settings and tried a few layouts until the wheel, the table and the quota panel worked together. We went with European roulette with a single zero."
+        },
+        {
+          "when": "Betting",
+          "title": "One script for every field",
+          "text": "All fields on the table share one script with an exported bet type, so adding a new bet type is just a setting in the editor. Bets are stored in a list, which lets players spread chips across the table and get each one paid out separately."
+        },
+        {
+          "when": "Feel",
+          "title": "Animations, sound and menus",
+          "text": "We added Tween animations for payouts and the quota counter, a quota overlay, chip and win sounds, drag and drop chips that stay on top while dragging, and an options and pause menu with saved volume settings."
+        },
+        {
+          "when": "After the jam",
+          "title": "Two versions on itch.io and a new scoring idea",
+          "text": "The jam version and the post-jam version are both available on itch.io. For the post-jam version we're working on modifiers that trigger one after another, so strong spins build up into a chain of payouts."
+        }
+      ],
+      "flow": {
+        "title": "What happens during one spin",
+        "steps": [
+          {
+            "title": "Place chips",
+            "text": "Every table field has a bet_type. Dropping a chip calls GameManager.place_bet()."
+          },
+          {
+            "title": "Store bets",
+            "text": "Each bet goes into an active_bets list, so any number of chips can be on the table."
+          },
+          {
+            "title": "Spin",
+            "text": "GameManager.spin() picks the winning number."
+          },
+          {
+            "title": "Resolve",
+            "text": "Every bet in the list is checked on its own and adds to the score."
+          },
+          {
+            "title": "Animate",
+            "text": "The UI plays Tweens and only moves on to the overlay or next round when the animation's callback fires."
+          }
+        ]
       }
     },
     {
@@ -55,58 +144,103 @@
       "order": 2,
       "status": "released",
       "title": "Camping Diorama",
-      "tagline": "A stylized 3D scene made solo – from Blender modelling and wind rigs to Substance texturing and UE5 rendering.",
-      "categories": ["Tech Art / 3D"],
-      "tech": ["Blender", "Substance Painter", "Unreal Engine 5"],
+      "tagline": "A stylized camping scene I made on my own, from modelling in Blender to rendering in Unreal Engine 5.",
+      "categories": [
+        "Tech Art / 3D"
+      ],
+      "tech": [
+        "Blender",
+        "Substance Painter",
+        "Unreal Engine 5"
+      ],
       "facts": {
-        "role": "Solo – modelling, UV mapping, rigging, texturing, scene assembly, lighting & rendering",
+        "role": "Everything (modelling, UVs, rigging, texturing, scene setup, lighting, rendering)",
         "team": "1",
         "duration": "approx. 75 hours",
         "engine": "Unreal Engine 5",
         "tools": "Blender, Substance Painter",
         "year": "2026",
-        "context": "University – 3D Game Art"
+        "context": "University, 3D Game Art module",
+        "result": "Grade 1.0 (100 of 100 points)"
       },
       "media": {
-        "cover": { "src": "assets/camping-diorama/cover.webp", "alt": "Stylized low-poly camping diorama with tent, campfire, chairs, pine trees and a river", "pixel": false },
-        "loop": "",
-        "video": { "youtubeId": "kMo6klFR--I" },
+        "cover": {
+          "src": "assets/camping-diorama/cover.webp",
+          "alt": "Stylized low-poly camping diorama with tent, campfire, chairs, pine trees and a river",
+          "pixel": false
+        },
+        "loop": "assets/camping-diorama/loop.mp4",
+        "video": {
+          "youtubeId": "kMo6klFR--I"
+        },
         "gallery": [
-          { "src": "assets/camping-diorama/cover.webp", "alt": "Full diorama rendered in Unreal Engine 5", "pixel": false }
+          {
+            "src": "assets/camping-diorama/cover.webp",
+            "alt": "Full diorama rendered in Unreal Engine 5",
+            "pixel": false
+          }
         ]
       },
-      "overview": "A complete stylized diorama built end to end on my own: every asset modelled in Blender, UV-unwrapped and textured in Substance Painter, rigged for wind animation and assembled, lit and rendered in Unreal Engine 5. The tent serves as the hero asset.",
+      "overview": "A small stylized diorama that I built completely on my own. I modelled every asset in Blender, unwrapped and textured them in Substance Painter, added a bone based wind rig and put everything together in Unreal Engine 5, where I also did the lighting and rendered the final showcase video. The tent is the hero asset.",
       "built": [
         "Modelled every asset in Blender, with the tent as the hero asset",
-        "UV mapping and a stylized low-poly texturing pipeline in Substance Painter",
-        "Bone-based wind rigs for deformation animation",
+        "UV mapping and a stylized low poly texturing workflow in Substance Painter",
+        "Bone based wind rigs for the animation",
         "Scripted FBX export from Blender to Unreal Engine",
-        "Master material setup, scene assembly and lighting in UE5",
+        "Master material, scene setup and lighting in UE5",
         "Animated camera showcase rendered with the Level Sequencer"
       ],
-      "challenge": "I started this project without real experience in any of the three tools. The biggest challenge was learning Blender, Substance Painter and Unreal Engine 5 well enough – in a short, fixed timeframe of around 75 hours – to use them properly instead of just getting something on screen. I solved it by focusing on a clean pipeline early: a consistent stylized texturing approach, a scripted FBX export and one master material in UE5, so each new asset went through the same steps instead of being solved from scratch.",
+      "challenge": "Before this project I had barely used any of the three tools. The hardest part was learning Blender, Substance Painter and Unreal Engine 5 well enough to use them properly, in about 75 hours in total. What helped most was setting up a fixed workflow early on: one stylized texturing approach, a script for the FBX export and a single master material in Unreal. After that every new asset went through the same steps and I didn't have to figure things out from scratch each time.",
       "breakdown": [
         {
-          "title": "Hero Asset: The Tent",
-          "text": "TODO short text about the tent – modelling decisions, poly budget, details.",
+          "title": "Hero asset: the tent",
+          "text": "The tent got the most attention. It has an olive canvas, a beige lower part with a leather edge, painted seam lines and a small plaid patch near one of the rope anchors. Details from a separate high-poly roof were baked onto the low-poly tent in Substance Painter.",
           "images": [
-            { "src": "assets/camping-diorama/tent-beauty.webp", "alt": "Textured tent hero asset rendered in UE5", "pixel": false },
-            { "src": "assets/camping-diorama/tent-clay.webp", "alt": "Clay render of the tent showing the pure form", "pixel": false },
-            { "src": "assets/camping-diorama/tent-wireframe.webp", "alt": "Wireframe of the tent showing the topology", "pixel": false }
+            {
+              "src": "assets/camping-diorama/tent-beauty.webp",
+              "alt": "Textured tent hero asset rendered in UE5",
+              "pixel": false
+            },
+            {
+              "src": "assets/camping-diorama/tent-clay.webp",
+              "alt": "Clay render of the tent showing the pure form",
+              "pixel": false
+            },
+            {
+              "src": "assets/camping-diorama/tent-wireframe.webp",
+              "alt": "Wireframe of the tent showing the topology",
+              "pixel": false
+            }
           ]
         },
         {
-          "title": "UV Mapping",
-          "text": "TODO short text about the UV layout – seams, texel density, packing.",
+          "title": "UV mapping",
+          "text": "I placed seams the way the real object is sewn or built, for example along fabric panels and on the back side of chair legs. A checker texture helped me keep the texel density even, and the tent gets more texture space than small or hidden parts.",
           "images": [
-            { "src": "assets/camping-diorama/tent-uv-map.webp", "alt": "UV layout of the tent", "pixel": false }
+            {
+              "src": "assets/camping-diorama/tent-uv-map.webp",
+              "alt": "UV layout of the tent",
+              "pixel": false
+            }
           ]
         },
-        { "title": "Texturing in Substance Painter", "text": "TODO", "images": [] },
-        { "title": "Wind Rig", "text": "TODO", "images": [] },
-        { "title": "Assembly & Lighting in UE5", "text": "TODO", "images": [] }
+        {
+          "title": "Texturing in Substance Painter",
+          "text": "All assets follow one stylized look with flat colours, light grunge and a bit of edge wear. On the tent I used a position generator for the leather edge at the bottom, a grunge map in multiply mode and hand-painted seams.",
+          "images": []
+        },
+        {
+          "title": "Wind rig",
+          "text": "Every moving asset has its own armature: the tent's curtains and canvas, the trees, cattails, grass blades, the river surface and the chairs. All of them follow the same gust curve, so the wind peaks across the whole scene at the same moment. Grass and river waves use offset phases so the motion doesn't look copied.",
+          "images": []
+        },
+        {
+          "title": "Assembly and lighting in UE5",
+          "text": "The assets came into Unreal as skeletal meshes with looping animations. One master material with packed ORM textures and a material instance per asset kept the setup simple. The lighting is a low afternoon sun, a post process volume with a bit more contrast and saturation, and fixed exposure for the camera flight.",
+          "images": []
+        }
       ],
-      "differently": "TODO what I'd do differently",
+      "differently": "A lot of my time went into learning the tools while I was already building. With what I know now I would plan the project in clear phases with time estimates from the start, set up the workflow first and then work through the assets in a more structured order.",
       "links": {
         "play": "",
         "code": "",
@@ -120,51 +254,109 @@
       "order": 3,
       "status": "released",
       "title": "Minecraft Fabric Mods",
-      "tagline": "Two published client-side mods for challenge runs – Challenge Timer and All Items.",
-      "categories": ["Programming"],
-      "tech": ["Java", "Fabric API"],
+      "tagline": "Two client-side mods for Minecraft challenge runs, published on Modrinth.",
+      "categories": [
+        "Programming"
+      ],
+      "tech": [
+        "Java",
+        "Fabric API"
+      ],
       "facts": {
         "role": "Solo developer",
         "team": "1",
-        "duration": "TODO duration",
+        "duration": "2 days (one to build both mods, one to update them to 26.3)",
         "engine": "Minecraft Java Edition (Fabric)",
-        "tools": "Java, Fabric API, TODO (IDE, Gradle, ...)",
+        "tools": "Java, Fabric API, Gradle",
         "year": "2026",
-        "context": "Personal – published on Modrinth"
+        "context": "Personal project, published on Modrinth"
       },
       "stats": [
-        { "label": "Challenge Timer downloads", "modrinthSlug": "challenge-timer-by-opniki", "fallback": "357" },
-        { "label": "All Items downloads", "modrinthSlug": "all-items-by-opniki", "fallback": "213" }
+        {
+          "label": "Challenge Timer downloads",
+          "modrinthSlug": "challenge-timer-by-opniki",
+          "fallback": "357"
+        },
+        {
+          "label": "All Items downloads",
+          "modrinthSlug": "all-items-by-opniki",
+          "fallback": "213"
+        }
       ],
       "media": {
-        "cover": { "src": "assets/fabric-mods/all-items-overview.webp", "alt": "All Items overview grid showing collected, skipped and remaining items", "pixel": false },
+        "cover": {
+          "src": "assets/fabric-mods/all-items-overview.webp",
+          "alt": "All Items overview grid showing collected, skipped and remaining items",
+          "pixel": false
+        },
         "loop": "",
-        "video": { "youtubeId": "" },
+        "video": {
+          "youtubeId": ""
+        },
         "gallery": [
-          { "src": "assets/fabric-mods/timer-white.webp", "alt": "Challenge Timer above the hotbar in the default style", "pixel": false },
-          { "src": "assets/fabric-mods/timer-red.webp", "alt": "Challenge Timer with custom red colour and background", "pixel": false },
-          { "src": "assets/fabric-mods/all-items-hud.webp", "alt": "All Items HUD showing the current target item and progress", "pixel": false },
-          { "src": "assets/fabric-mods/all-items-overview.webp", "alt": "All Items overview with done, skipped and remaining items", "pixel": false }
+          {
+            "src": "assets/fabric-mods/timer-white.webp",
+            "alt": "Challenge Timer above the hotbar in the default style",
+            "pixel": false
+          },
+          {
+            "src": "assets/fabric-mods/timer-red.webp",
+            "alt": "Challenge Timer with custom red colour and background",
+            "pixel": false
+          },
+          {
+            "src": "assets/fabric-mods/all-items-hud.webp",
+            "alt": "All Items HUD showing the current target item and progress",
+            "pixel": false
+          },
+          {
+            "src": "assets/fabric-mods/all-items-overview.webp",
+            "alt": "All Items overview with done, skipped and remaining items",
+            "pixel": false
+          }
         ]
       },
-      "overview": "Two client-side Fabric mods for singleplayer challenge runs, the kind known from Let's Plays. Challenge Timer shows a run timer above the hotbar. All Items challenges you to collect every item in the game, one at a time, in random order. Both are published on Modrinth and support Minecraft 26.2 and 26.3.",
+      "overview": "Two small client-side Fabric mods for singleplayer challenge runs, the kind you know from Let's Plays. Challenge Timer puts a run timer above the hotbar. All Items gives you every item in the game one by one in random order, and you have to collect all of them. Both are on Modrinth and work with Minecraft 26.2 and 26.3.",
       "built": [
-        "Challenge Timer: real-time run timer that pauses in the pause menu, scales its format from seconds to days and is fully controlled by commands",
-        "All Items: the item pool is read from the game registry at runtime – nothing is hardcoded, so it always matches the installed version",
-        "Seed-based random order, automatic detection in inventory, off-hand and armour slots, and a warning for items that can't be obtained in survival",
-        "Scrollable overview grid that lists remaining items alphabetically, so the upcoming order stays hidden",
-        "Custom HUD rendering with configurable hex colour and background, plus progress saved per world",
-        "Ported both mods to a new Minecraft version and its API changes (26.2 → 26.3)"
+        "Challenge Timer: real time run timer that pauses in the pause menu, grows its format from seconds up to days and is controlled with commands",
+        "All Items: the item list is read from the game's registry at runtime instead of being hardcoded, so it always matches the installed version",
+        "Potions, tipped arrows and enchanted books are split into one entry per variant",
+        "Random order based on a seed, automatic detection in inventory, off-hand and armour slots, and a warning for items you can't get in survival",
+        "Scrollable overview of done, skipped and remaining items, sorted alphabetically so the upcoming order stays secret",
+        "Custom HUD with adjustable hex colour and background, progress saved per world as JSON",
+        "Updated both mods to Minecraft 26.3 and its API changes"
       ],
-      "challenge": "The gameplay logic itself was straightforward. The trickier part was the step from a mod that runs in my own development environment to a public release that installs and works for everyone right away – packaging it correctly, declaring the right dependencies and versions, and publishing it on Modrinth so players can simply drop it into their mods folder.",
-      "differently": "TODO what I'd do differently",
+      "challenge": "The gameplay code itself was pretty simple. What took more effort was getting from a mod that ran fine in my dev environment to a release that anyone can download and use straight away. That meant packaging it properly, setting the right dependencies and version info, and publishing it on Modrinth so players only have to drop it into their mods folder.",
+      "differently": "",
       "links": {
         "play": "",
         "code": "",
         "download": "https://modrinth.com/mod/challenge-timer-by-opniki",
         "download2": "https://modrinth.com/mod/all-items-by-opniki",
-        "video": ""
-      }
+        "video": "",
+        "extra": [
+          {
+            "label": "Challenge Timer source",
+            "url": "https://github.com/OPNiki/challenge-timer",
+            "icon": "code"
+          },
+          {
+            "label": "All Items source",
+            "url": "https://github.com/OPNiki/item-challenge",
+            "icon": "code"
+          }
+        ]
+      },
+      "snippets": [
+        {
+          "title": "Building the item list at runtime",
+          "file": "ChallengeState.java (All Items)",
+          "lang": "java",
+          "url": "https://github.com/OPNiki/item-challenge",
+          "note": "The mod never ships a fixed item list. It walks the game's item registry when a challenge starts, expands items with variants and shuffles the result with the chosen seed, so the same seed always gives the same order.",
+          "code": "private static List<String> allEntryIds(Minecraft client) {\n    List<String> entries = new ArrayList<>();\n    for (Item item : BuiltInRegistries.ITEM) {\n        if (item == Items.AIR) continue;\n        String id = BuiltInRegistries.ITEM.getKey(item).toString();\n        entries.addAll(Variants.expand(id, client));\n    }\n    return entries;\n}\n\npublic static void start(Minecraft client, long seed) {\n    List<String> entries = allEntryIds(client);\n    Collections.shuffle(entries, new Random(seed));\n\n    data = new Data();\n    data.seed = seed;\n    data.order = entries;\n    data.active = true;\n    openCache = null;\n    save();\n}"
+        }
+      ]
     },
     {
       "id": "campus-balance-run",
@@ -172,44 +364,81 @@
       "order": 4,
       "status": "released",
       "title": "Campus Balance Run",
-      "tagline": "A wellbeing-themed endless runner made for Ashoka and the Campus Wellbeing Project – now used on campuses worldwide.",
-      "categories": ["Programming", "Game Design"],
-      "tech": ["HTML", "CSS", "JavaScript"],
+      "tagline": "Endless runner about student wellbeing, made for Ashoka and the Campus Wellbeing Project. Now played on campuses worldwide.",
+      "categories": [
+        "Programming",
+        "Game Design"
+      ],
+      "tech": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
       "facts": {
-        "role": "Programming",
-        "team": "5 students",
-        "duration": "TODO duration",
-        "engine": "None – plain HTML5 / JavaScript",
+        "role": "Programming (all of the game code)",
+        "team": "5 students: Isabella Lehmann, Anika Böhning, Carl Bob, Marcel Sanchez Velez and me",
+        "duration": "About 3 months",
+        "engine": "No engine, plain HTML5 and JavaScript",
         "tools": "HTML, CSS, JavaScript",
         "year": "2026",
-        "context": "University – client project for Ashoka & the Campus Wellbeing Project"
+        "context": "University client project for Ashoka and the Campus Wellbeing Project, Game Design course with Prof. Dr. Anna Rebecca Unterholzner"
       },
       "media": {
-        "cover": { "src": "assets/campus-balance-run/title-screen.webp", "alt": "Campus Balance Run title screen with the sprout mascot running across campus", "pixel": false, "position": "center 30%" },
+        "cover": {
+          "src": "assets/campus-balance-run/title-screen.webp",
+          "alt": "Campus Balance Run title screen with the sprout mascot running across campus",
+          "pixel": false,
+          "position": "center 30%"
+        },
         "loop": "",
-        "video": { "youtubeId": "" },
+        "video": {
+          "youtubeId": ""
+        },
         "gallery": [
-          { "src": "assets/campus-balance-run/title-screen.webp", "alt": "Title screen with the mascot and the Campus Wellbeing Project logo", "pixel": false },
-          { "src": "assets/campus-balance-run/gameplay.webp", "alt": "Gameplay: running down a corridor with Energy, Social and Balance meters at the top", "pixel": false },
-          { "src": "assets/campus-balance-run/game-over.webp", "alt": "Results screen showing collected items and distance", "pixel": false },
-          { "src": "assets/campus-balance-run/credits.webp", "alt": "Credits screen listing the development team and course", "pixel": false }
+          {
+            "src": "assets/campus-balance-run/title-screen.webp",
+            "alt": "Title screen with the mascot and the Campus Wellbeing Project logo",
+            "pixel": false
+          },
+          {
+            "src": "assets/campus-balance-run/gameplay.webp",
+            "alt": "Gameplay: running down a corridor with Energy, Social and Balance meters at the top",
+            "pixel": false
+          },
+          {
+            "src": "assets/campus-balance-run/game-over.webp",
+            "alt": "Results screen showing collected items and distance",
+            "pixel": false
+          },
+          {
+            "src": "assets/campus-balance-run/credits.webp",
+            "alt": "Credits screen listing the development team and course",
+            "pixel": false
+          }
         ]
       },
-      "overview": "Ashoka, partnering with the Campus Wellbeing Project, asked our course to develop a game that supports the project's message. Our answer is an endless runner in the style of Subway Surfers: you run across campus and have to keep collecting orbs for Energy, Social and Balance – if one of them runs empty, the run is over. The game runs in any browser and is now used at campuses worldwide. I was responsible for the programming in a team of five.",
+      "overview": "Ashoka and the Campus Wellbeing Project asked our course for a game that supports the project's message. We made an endless runner in the style of Subway Surfers. You run across campus and keep collecting orbs for Energy, Social and Balance. If one of them runs empty, the run is over. The game runs in any browser and is now used at campuses around the world. I wrote all of the game code. My teammates did the visual design, the documentation and a promo video.",
       "built": [
-        "The complete game code in plain JavaScript – no engine, runs in any browser including phones",
-        "Three-lane runner movement and continuous forward scrolling",
-        "Energy, Social and Balance meters that drain over time and refill with collected orbs – the core lose condition",
-        "Obstacle and pickup spawning, distance tracking and the results screen",
-        "Integration of the team's art and UI into a mobile-friendly portrait layout"
+        "All of the game code in plain JavaScript without an engine, so it runs in every browser, phones included",
+        "Movement between three lanes and the endless forward scrolling",
+        "Energy, Social and Balance meters that drain over time and refill when you collect orbs",
+        "Spawning of obstacles and pickups, distance tracking and the results screen",
+        "Putting the team's art and UI into a portrait layout that works well on phones"
       ],
-      "challenge": "TODO challenge and solution",
-      "differently": "TODO what I'd do differently",
+      "challenge": "The game had to be very small and run on as many devices as possible, even on a bad internet connection, because it is also played in countries where internet access is limited. I kept the download tiny by handling as much as possible in code: the team's assets are scaled and reused at runtime instead of shipping many large files, so everything still looks right but loads quickly on weak phones and slow networks.",
+      "differently": "I would set a size budget for every type of asset at the very start and test on old phones and throttled connections from the first week. That way the art could have been produced at the right size from the beginning instead of being reduced later.",
       "links": {
         "play": "https://opniki.itch.io/campus-balance-run",
         "code": "",
         "download": "",
-        "video": ""
+        "video": "",
+        "extra": [
+          {
+            "label": "Campus Wellbeing Project",
+            "url": "https://www.campuswellbeingproject.com",
+            "icon": "external"
+          }
+        ]
       }
     },
     {
@@ -217,22 +446,35 @@
       "featured": true,
       "order": 5,
       "status": "coming-soon",
-      "statusNote": "January 2027",
-      "title": "TODO title – Rhythm Board Game",
-      "tagline": "A racing board game with a custom ESP32 buzzer box – no PC required.",
-      "categories": ["Game Design", "Hardware"],
-      "tech": ["ESP32", "C++ (Arduino)"],
+      "statusNote": "In progress, due January 2027",
+      "title": "Rhythm Board Game",
+      "tagline": "A racing board game with a homemade ESP32 buzzer box. No PC needed.",
+      "categories": [
+        "Game Design",
+        "Hardware"
+      ],
+      "tech": [
+        "ESP32",
+        "C++ (Arduino)"
+      ],
       "facts": {
-        "role": "Solo – game design, electronics & programming",
+        "role": "Solo (game design, electronics and programming)",
         "team": "1",
         "duration": "TODO duration",
         "engine": "ESP32 (Arduino)",
         "tools": "TODO tools",
         "year": "2026/27",
-        "context": "University – Game Design 1 (board game project)"
+        "context": "Current semester project, Game Design 1 board game course"
       },
-      "media": { "cover": "", "loop": "", "video": { "youtubeId": "" }, "gallery": [] },
-      "overview": "Players race to the finish. Each turn they choose 1, 2 or 3 spaces (easy, medium, hard) on a custom buzzer box, then have to memorize and repeat a Simon-Says sequence to move.",
+      "media": {
+        "cover": "",
+        "loop": "",
+        "video": {
+          "youtubeId": ""
+        },
+        "gallery": []
+      },
+      "overview": "This is a current semester project, so this page will grow as it develops. Players race to the finish. Each turn they pick 1, 2 or 3 spaces (easy, medium or hard) on a buzzer box, then have to remember and repeat a Simon Says sequence to move.",
       "built": [
         "Game design and board design",
         "Custom ESP32 controller with buzzers and LEDs",
@@ -240,7 +482,12 @@
       ],
       "challenge": "TODO",
       "differently": "TODO",
-      "links": { "play": "", "code": "", "download": "", "video": "" }
+      "links": {
+        "play": "",
+        "code": "",
+        "download": "",
+        "video": ""
+      }
     },
     {
       "id": "pacgame",
@@ -248,17 +495,101 @@
       "order": 10,
       "status": "released",
       "title": "PACGAME",
-      "tagline": "Arcade item collector for PICO-8: grab the items, reach the exit, beat the shrinking timer. Includes persistent highscores and a Unity 2D port.",
-      "categories": ["Programming"],
-      "tech": ["PICO-8", "Lua", "Unity"],
+      "tagline": "Small PICO-8 arcade game. Collect the items, reach the exit and beat a timer that gets shorter every level. I also rebuilt it in Unity to learn the engine's basics, with an animated cube background and post-processing.",
+      "categories": [
+        "Programming"
+      ],
+      "tech": [
+        "PICO-8",
+        "Lua",
+        "Unity"
+      ],
       "media": {
-        "cover": { "src": "assets/pacgame/cover.webp", "alt": "PACGAME cover with the player on a checkerboard grid", "pixel": true },
+        "cover": {
+          "src": "assets/pacgame/cover.webp",
+          "alt": "PACGAME cover with the player on a checkerboard grid",
+          "pixel": true
+        },
         "gallery": [
-          { "src": "assets/pacgame/gameplay.webp", "alt": "PACGAME level 5 with timer, level and score in the HUD", "pixel": true },
-          { "src": "assets/pacgame/game-over.webp", "alt": "Game over screen with level, score and highscore", "pixel": true }
+          {
+            "src": "assets/pacgame/gameplay.webp",
+            "alt": "PACGAME level 5 with timer, level and score in the HUD",
+            "pixel": true
+          },
+          {
+            "src": "assets/pacgame/game-over.webp",
+            "alt": "Game over screen with level, score and highscore",
+            "pixel": true
+          },
+          {
+            "src": "assets/pacgame/unity-gameplay.webp",
+            "alt": "Unity version: 7×7 grid with animated cube background",
+            "pixel": false
+          },
+          {
+            "src": "assets/pacgame/unity-win.webp",
+            "alt": "Unity version: win screen between levels",
+            "pixel": false
+          },
+          {
+            "src": "assets/pacgame/unity-lose.webp",
+            "alt": "Unity version: game over screen with highscore",
+            "pixel": false
+          }
         ]
       },
-      "links": { "play": "https://opniki.itch.io/pacgame" }
+      "links": {
+        "play": "https://opniki.itch.io/pacgame"
+      }
+    },
+    {
+      "id": "product-3d-print",
+      "featured": true,
+      "order": 6,
+      "status": "coming-soon",
+      "statusNote": "In progress",
+      "title": "3D Printed Everyday Object",
+      "tagline": "Designing a 3D printable object that solves a real everyday problem, shown at an exhibition with Kartell.",
+      "categories": [
+        "Tech Art / 3D",
+        "Hardware"
+      ],
+      "tech": [
+        "Blender",
+        "Bambu Studio",
+        "FDM printing"
+      ],
+      "facts": {
+        "role": "Solo, concept, 3D modelling and printing",
+        "team": "1",
+        "duration": "Current semester",
+        "engine": "",
+        "tools": "Blender, Bambu Studio",
+        "year": "2026/27",
+        "context": "Current semester project, 3D printing course (TODO exact course name)"
+      },
+      "media": {
+        "cover": "",
+        "loop": "",
+        "video": {
+          "youtubeId": ""
+        },
+        "gallery": []
+      },
+      "overview": "This is a current semester project, so this page will grow as it develops. In this course each of us designs an object for a real everyday problem and produces it with 3D printing. At the end of the semester the results are shown at an exhibition, with the furniture brand Kartell among the guests. I'm currently working out my concept, for example a modular holder that clicks together and stops records from falling over in a shelf.",
+      "built": [
+        "Concept and problem research",
+        "3D model in Blender, prepared for FDM printing",
+        "Test prints and iterations in Bambu Studio"
+      ],
+      "challenge": "",
+      "differently": "",
+      "links": {
+        "play": "",
+        "code": "",
+        "download": "",
+        "video": ""
+      }
     }
   ]
 }

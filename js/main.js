@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const [site, projects] = await Promise.all([loadSite(), loadProjects()]);
     renderHero(site);
-    renderProjects(projects.filter((p) => p.featured));
+    const featured = projects.filter((p) => p.featured);
+    renderProjects(featured.filter((p) => p.status !== "coming-soon"));
+    renderWip(featured.filter((p) => p.status === "coming-soon"));
     renderOther(projects.filter((p) => !p.featured));
     renderExperience(site.experience || []);
     renderSkills(site.skills || []);
@@ -60,6 +62,13 @@ function renderProjects(projects) {
   });
 }
 
+/* ---------- In progress (coming-soon projects get their own row) ---------- */
+function renderWip(projects) {
+  const section = document.getElementById("wip");
+  if (!projects.length) { section.hidden = true; return; }
+  document.getElementById("wip-grid").append(...projects.map((p, i) => projectCard(p, i + 1)));
+}
+
 /* FLIP animation: remember positions, change layout, animate from old to new */
 function applyFilter(grid, cat) {
   const cards = [...grid.children];
@@ -86,7 +95,7 @@ function applyFilter(grid, cat) {
 }
 
 function statusBadge(p) {
-  if (p.status === "coming-soon") return h("span", { class: "badge soon" }, `Coming ${p.statusNote || "soon"}`);
+  if (p.status === "coming-soon") return h("span", { class: "badge soon" }, p.statusNote || "Coming soon");
   if (p.status === "in-development") return h("span", { class: "badge" }, "In development");
   return null;
 }
@@ -114,7 +123,7 @@ function projectCard(p, i) {
       h("div", { class: "card-foot" },
         h("div", { class: "chips" }, (p.tech || []).filter(hasContent).map((t) => h("span", { class: "chip" }, txt(t)))),
         h("span", { class: "card-arrow" }, icon("arrow")))),
-    h("a", { class: "card-link", href: `project.html?id=${encodeURIComponent(p.id)}`, "aria-label": `${p.title} – view project` }));
+    h("a", { class: "card-link", href: `project.html?id=${encodeURIComponent(p.id)}`, "aria-label": `View project: ${p.title}` }));
 
   // cursor glow: update CSS variables with the mouse position
   if (!REDUCED_MOTION) {

@@ -219,11 +219,19 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .filter:hover { color: var(--text); border-color: var(--border-strong); }
 .filter[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 
-.project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+.project-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-5); }
+.project-grid .card { grid-column: span 2; }
 .project-grid .card:first-child { grid-column: 1 / -1; }
 .project-grid .card:first-child .card-media { aspect-ratio: 21 / 9; }
+.project-grid.wip-grid { grid-template-columns: repeat(2, 1fr); }
+.project-grid.wip-grid .card, .project-grid.wip-grid .card:first-child { grid-column: auto; }
+.project-grid.wip-grid .card:first-child .card-media { aspect-ratio: 16 / 10; }
+@media (max-width: 1000px) {
+  .project-grid .card { grid-column: span 3; }
+}
 @media (max-width: 760px) {
-  .project-grid { grid-template-columns: 1fr; }
+  .project-grid, .project-grid.wip-grid { grid-template-columns: 1fr; }
+  .project-grid .card, .project-grid .card:first-child { grid-column: 1 / -1; }
   .project-grid .card:first-child .card-media { aspect-ratio: 16 / 10; }
 }
 .card {
@@ -454,3 +462,27 @@ img.pixel { image-rendering: pixelated; image-rendering: crisp-edges; }
 
 /* hover lift must win over the reveal reset */
 .card.reveal.visible:hover { transform: translateY(-3px); }
+
+/* ---------- Project page: video poster, flow, development steps, code ---------- */
+.media-frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* numbered process: a real sequence, so the numbers carry meaning */
+.flow { list-style: none; margin: 0; padding: 0; counter-reset: step; display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: var(--space-3); }
+.flow-step { counter-increment: step; position: relative; display: grid; gap: var(--space-2); align-content: start; padding: var(--space-4); border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--border); font-size: var(--fs-sm); color: var(--text-muted); min-width: 0; overflow-wrap: anywhere; }
+.flow-step::before { content: counter(step); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-mono); font-size: 0.75rem; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-line); }
+.flow-step strong { color: var(--text); font-family: var(--font-head); font-size: var(--fs-base); }
+.flow-step:not(:last-child)::after { content: "→"; position: absolute; right: -0.65rem; top: 1.35rem; color: var(--accent); font-family: var(--font-mono); z-index: 1; }
+@media (max-width: 700px) { .flow-step:not(:last-child)::after { display: none; } }
+
+.devlog { display: grid; }
+.devlog-item { display: grid; grid-template-columns: 130px 1fr; gap: var(--space-5); padding: var(--space-4) 0; border-top: 1px solid var(--border); }
+.devlog-item:last-child { border-bottom: 1px solid var(--border); }
+.devlog-when { color: var(--accent); padding-top: 0.2rem; }
+.devlog-item h3 { font-size: var(--fs-base); margin-bottom: var(--space-1); }
+.devlog-item p { color: var(--text-muted); font-size: var(--fs-sm); max-width: 44rem; }
+@media (max-width: 640px) { .devlog-item { grid-template-columns: 1fr; gap: var(--space-1); } }
+
+.snippet { margin: 0; display: grid; gap: var(--space-4); }
+.code-frame { border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-soft); overflow: hidden; min-width: 0; }
+.code-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-4); border-bottom: 1px solid var(--border); color: var(--text-faint); background: var(--surface); flex-wrap: wrap; }
+.code-frame pre { margin: 0; padding: var(--space-4); overflow-x: auto; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.65; color: var(--text); tab-size: 4; }

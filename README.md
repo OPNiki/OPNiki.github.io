@@ -8,7 +8,7 @@ All content lives in two JSON files – you normally never need to touch HTML.
 ```
 index.html        Home page (hero, projects, other work, experience, skills, about, contact)
 project.html      One template for all project pages → project.html?id=<project-id>
-imprint.html      Legal notice (Impressum)
+privacy.html      Privacy information
 css/style.css     All styles. Colours and sizes are CSS variables at the top (:root)
 js/shared.js      Helpers used everywhere: SHOW_TODOS switch, data loading, theme, lightbox
 js/main.js        Renders the home page
@@ -56,6 +56,11 @@ Then every TODO text, TODO link and section without real content disappears auto
    - `media.video.youtubeId` – optional, shown on the project page (loads only after a click)
    - `breakdown` – optional steps with text and images
    - `stats` – optional, `modrinthSlug` fetches live download numbers
+   - `flow` – optional numbered process: `{ "title", "steps": [{ "title", "text" }] }`
+   - `devlog` – optional development steps: `[{ "when", "title", "text" }]`
+   - `snippets` – optional code: `[{ "title", "file", "lang", "url", "note", "code" }]`
+   - `links.extra` – optional extra buttons: `[{ "label", "url", "icon" }]` (icon: code, external, video, download, play)
+   - `facts.result` – optional, e.g. a grade
 3. Empty strings or missing fields are simply not rendered.
 
 ## Change colours

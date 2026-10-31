@@ -1,12 +1,12 @@
 {
   "name": "Niklas Lang",
   "role": "Technical Game Developer",
-  "tagline": "I build the technical side of games – from gameplay systems to 3D pipelines.",
+  "tagline": "I build the technical side of games, from gameplay systems to 3D pipelines.",
   "location": "Cologne, Germany",
   "now": [
     "Studying Game Design & Development at Macromedia University, Cologne",
     "Working student in Enterprise Architecture Management at CONET",
-    "Developing the post-jam version of ONE MORE SPIN"
+    "Working on the post-jam version of ONE MORE SPIN"
   ],
   "links": {
     "itch": "https://opniki.itch.io/",
@@ -14,44 +14,89 @@
     "linkedin": "https://www.linkedin.com/in/niklas-lang-9ab7a83b3/",
     "modrinth": ""
   },
-  "email": { "user": "TODO_EMAIL_USER", "domain": "TODO_EMAIL_DOMAIN" },
-  "cv": "",
+  "email": {
+    "user": "niklas.lang.dev",
+    "domain": "gmail.com"
+  },
+  "cv": "assets/cv/niklas-lang-cv.pdf",
   "about": [
-    "I'm a Game Design & Development student at Macromedia University in Cologne with a background in IT. Before my studies I trained as an IT specialist for systems integration (Fachinformatiker für Systemintegration) and worked in IT support.",
-    "That background shapes how I make games. I enjoy the technical backbone – gameplay systems, tools, clean pipelines from Blender to the engine – and the problem-solving that comes with it. Alongside my studies I work as a working student in Enterprise Architecture Management at CONET.",
-    "What drives me is the moment a system clicks: when the code, the art pipeline and the design come together into something that simply feels right to play. I want to keep building exactly that – on teams where technical and creative people work side by side."
+    "I study Game Design & Development at Macromedia University in Cologne. Before that I trained as an IT specialist for systems integration (Fachinformatiker für Systemintegration) and worked in IT support.",
+    "That background still shows in how I make games. I like the technical side the most: gameplay systems, tools and getting assets cleanly from Blender into the engine. Next to my studies I work as a working student in Enterprise Architecture Management at CONET.",
+    "I'm happiest when code, art and design come together and a game just plays well. That's what I want to keep working on, ideally in a team where technical and creative people work closely together."
   ],
-  "languages": ["German (native)", "English (C1)"],
+  "languages": [
+    "German (native)",
+    "English (C1)"
+  ],
   "experience": [
     {
-      "period": "04/2026 – present",
-      "title": "Working Student – Enterprise Architecture Management",
+      "period": "Since 04/2026",
+      "title": "Working Student, Enterprise Architecture Management",
       "org": "CONET",
-      "text": "Supporting various client projects in enterprise architecture management (details under NDA)."
+      "text": "I support different client projects in enterprise architecture management. Details are under NDA."
     },
     {
-      "period": "04/2026 – present",
+      "period": "Since 04/2026",
       "title": "B.A. Game Design & Development",
       "org": "Macromedia University of Applied Sciences, Cologne",
-      "text": "Game design, programming, 3D game art and game studies."
+      "text": "Summer semester 2026: certificate courses in 3D Game Art, Game Storytelling, Game Analysis, Game Design 2 and Game Engines & Scripting. 25 ECTS with an average grade of 1.1 (German scale, 1.0 is the best grade)."
     },
     {
-      "period": "01/2026 – 03/2026",
+      "period": "01/2026 - 03/2026",
       "title": "IT Support Specialist",
       "org": "Yncoris GmbH & Co. KG",
       "text": "1st/2nd level support, endpoint management and hardware rollouts."
     },
     {
-      "period": "08/2023 – 01/2026",
-      "title": "Apprenticeship – IT Specialist for Systems Integration",
+      "period": "08/2023 - 01/2026",
+      "title": "Apprenticeship as IT Specialist for Systems Integration",
       "org": "Yncoris GmbH & Co. KG",
       "text": "Support, M365 administration, datacenter, networking, Big Data & IoT."
     }
   ],
   "skills": [
-    { "group": "Engines", "items": ["Godot 4", "Unreal Engine 5", "Unity", "PICO-8"] },
-    { "group": "Languages", "items": ["GDScript", "Java", "C#", "JavaScript", "Python", "Lua", "HTML & CSS", "SQL", "PowerShell"] },
-    { "group": "3D & Art Pipeline", "items": ["Blender", "Substance Painter", "UV mapping", "Rigging for animation", "UE5 materials & lighting"] },
-    { "group": "Tools & IT", "items": ["Git & GitHub", "Fabric modding", "M365 administration", "Networking", "IT support & endpoint management"] }
+    {
+      "group": "Engines",
+      "items": [
+        "Godot 4",
+        "Unreal Engine 5",
+        "Unity",
+        "PICO-8"
+      ]
+    },
+    {
+      "group": "Languages",
+      "items": [
+        "GDScript",
+        "Java",
+        "C#",
+        "JavaScript",
+        "Python",
+        "Lua",
+        "HTML & CSS",
+        "SQL",
+        "PowerShell"
+      ]
+    },
+    {
+      "group": "3D & Art Pipeline",
+      "items": [
+        "Blender",
+        "Substance Painter",
+        "UV mapping",
+        "Rigging for animation",
+        "UE5 materials & lighting"
+      ]
+    },
+    {
+      "group": "Tools & IT",
+      "items": [
+        "Git & GitHub",
+        "Gradle",
+        "Fabric modding",
+        "Bambu Studio (3D printing)",
+        "Networking & system administration"
+      ]
+    }
   ]
 }

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const featured = projects.filter((p) => p.featured);
     const p = projects.find((x) => x.id === id);
     if (!p) return renderNotFound(root);
-    document.title = `${p.title} – Niklas Lang`;
+    document.title = `${p.title} | Niklas Lang`;
     const desc = document.querySelector('meta[name="description"]');
     if (desc && !isTodo(p.tagline)) desc.setAttribute("content", p.tagline);
     await renderProject(root, p, featured);
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function renderNotFound(root) {
-  document.title = "Project not found – Niklas Lang";
+  document.title = "Project not found | Niklas Lang";
   root.append(h("div", { class: "not-found" },
     h("span", { class: "mono", style: "color:var(--accent)" }, "404"),
     h("h1", { style: "font-size:var(--fs-2xl)" }, "Project not found"),
@@ -55,21 +55,24 @@ async function renderProject(root, p, featured) {
 
   if (p.status === "coming-soon") {
     main.append(h("div", { class: "wip-note reveal" }, h("span", { class: "badge soon" }, "WIP"),
-      `Work in progress – this project is scheduled for ${p.statusNote || "later"}. More details and media will follow.`));
+      "This is a work in progress. More details and media will follow as the project develops."));
   }
 
   main.append(...[
     block("Overview", "01", hasContent(p.overview) ? h("p", { class: "prose" }, txt(p.overview)) : null),
     block("What I built", "02", builtList(p.built)),
+    flowBlock(p.flow),
     block("Challenge & solution", "03", hasContent(p.challenge) ? h("p", { class: "prose callout" }, txt(p.challenge)) : null),
+    snippetsBlock(p.snippets),
+    devlogBlock(p.devlog),
     breakdownBlock(p.breakdown),
     await galleryBlock(media.gallery, p.title),
-    block("What I'd do differently", "—", hasContent(p.differently) ? h("p", { class: "prose" }, txt(p.differently)) : null),
+    block("What I'd do differently", "", hasContent(p.differently) ? h("p", { class: "prose" }, txt(p.differently)) : null),
   ].filter(Boolean));
 
   // number the visible sections 01, 02, … (skipped sections leave no gaps)
   let n = 0;
-  main.querySelectorAll(".block > h2 .mono").forEach((el) => { if (el.textContent !== "—") el.textContent = String(++n).padStart(2, "0"); });
+  main.querySelectorAll(".block > h2 .mono").forEach((el) => { el.textContent = String(++n).padStart(2, "0"); });
 
   /* --- Next project (wraps around) --- */
   const i = featured.findIndex((x) => x.id === p.id);
@@ -83,7 +86,7 @@ async function renderProject(root, p, featured) {
 }
 
 function projectBadge(p) {
-  if (p.status === "coming-soon") return h("span", { class: "badge soon" }, `Coming ${p.statusNote || "soon"}`);
+  if (p.status === "coming-soon") return h("span", { class: "badge soon" }, p.statusNote || "Coming soon");
   if (p.status === "in-development") return h("span", { class: "badge" }, p.statusNote || "In development");
   return null;
 }
@@ -108,14 +111,17 @@ async function heroMedia(p, media) {
   if (isLink(ytId)) {
     // GDPR: nothing is loaded from YouTube until the visitor clicks
     const frame = h("div", { class: "media-frame" });
+    const posterMedia = isLink(media.loop) && !REDUCED_MOTION
+      ? h("video", { src: media.loop, autoplay: true, muted: true, loop: true, playsinline: true, poster: cover ? cover.src : null, "aria-hidden": "true" })
+      : img(cover, { title: p.title, eager: true });
     const poster = h("button", { class: "yt-poster", type: "button", "aria-label": `Play video: ${p.title}` },
-      img(cover, { title: p.title, eager: true }),
+      posterMedia,
       h("span", { class: "yt-play" }, icon("play"), "Play video"),
       h("span", { class: "yt-note" }, "Loads YouTube (youtube-nocookie.com)"));
     poster.addEventListener("click", () => {
       frame.replaceChildren(h("iframe", {
         src: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytId)}?autoplay=1&rel=0`,
-        title: `${p.title} – video`, allow: "autoplay; encrypted-media; picture-in-picture; fullscreen", allowfullscreen: true,
+        title: `${p.title} video`, allow: "autoplay; encrypted-media; picture-in-picture; fullscreen", allowfullscreen: true,
       }));
     });
     frame.append(poster);
@@ -150,7 +156,7 @@ async function heroMedia(p, media) {
 /* ---------- Aside boxes ---------- */
 function factsBox(facts) {
   if (!facts) return null;
-  const labels = [["role", "Role"], ["team", "Team"], ["duration", "Duration"], ["engine", "Engine"], ["tools", "Tools"], ["year", "Year"], ["context", "Context"]];
+  const labels = [["role", "Role"], ["team", "Team"], ["duration", "Duration"], ["engine", "Engine"], ["tools", "Tools"], ["year", "Year"], ["context", "Context"], ["result", "Result"]];
   const rows = labels.filter(([k]) => hasContent(facts[k]))
     .map(([k, label]) => h("div", { class: "fact" }, h("dt", {}, label), h("dd", {}, txt(facts[k]))));
   if (!rows.length) return null;
@@ -161,7 +167,7 @@ function statsBox(stats) {
   if (!stats || !stats.length) return null;
   const wrap = h("div", { class: "stats reveal" });
   stats.forEach((s) => {
-    const num = h("div", { class: "stat-num" }, isTodo(s.fallback) ? "–" : s.fallback);
+    const num = h("div", { class: "stat-num" }, isTodo(s.fallback) ? "…" : s.fallback);
     const live = h("div", { class: "stat-live offline" }, "saved value");
     wrap.append(h("div", { class: "stat" }, num, h("div", { class: "stat-label" }, s.label), live));
 
@@ -186,6 +192,9 @@ function linksBox(p) {
     isLink(l.download2) && h("a", { class: "btn btn-primary", href: l.download2, target: "_blank", rel: "noopener" }, h("span", {}, isMods ? "All Items on Modrinth" : "Download"), icon("download")),
     isLink(l.code) && h("a", { class: "btn", href: l.code, target: "_blank", rel: "noopener" }, h("span", {}, "Source code"), icon("code")),
     isLink(l.video) && h("a", { class: "btn", href: l.video, target: "_blank", rel: "noopener" }, h("span", {}, "Watch on YouTube"), icon("video")),
+    // any number of extra links: [{ label, url, icon }]
+    ...(l.extra || []).filter((x) => isLink(x.url)).map((x) =>
+      h("a", { class: "btn", href: x.url, target: "_blank", rel: "noopener" }, h("span", {}, x.label), icon(x.icon || "external"))),
   ].filter(Boolean);
   if (!btns.length) return null;
   return h("div", { class: "reveal", style: "display:grid;gap:var(--space-3)" }, h("h2", { class: "aside-title" }, "Links"), h("div", { class: "link-buttons" }, btns));
@@ -220,4 +229,36 @@ function thumbGrid(images, all, offset) {
   return h("div", { class: "gallery" }, images.map((m, i) =>
     h("button", { class: "gallery-item", type: "button", "aria-label": `Enlarge: ${m.alt || "image"}`, onclick: () => Lightbox.open(all, offset + i) },
       img(m, {}))));
+}
+
+/* ---------- Flow: numbered steps of one process (a real sequence) ---------- */
+function flowBlock(flow) {
+  if (!flow || !flow.steps || !flow.steps.length) return null;
+  const list = h("ol", { class: "flow" }, flow.steps.map((st) =>
+    h("li", { class: "flow-step" }, h("strong", {}, st.title), h("span", {}, txt(st.text)))));
+  return block(flow.title || "How it works", "", list);
+}
+
+/* ---------- Development steps ---------- */
+function devlogBlock(items) {
+  const list = (items || []).filter((x) => hasContent(x.text));
+  if (!list.length) return null;
+  return block("How it came together", "", h("div", { class: "devlog" }, list.map((x) =>
+    h("div", { class: "devlog-item" },
+      h("span", { class: "devlog-when mono" }, x.when || ""),
+      h("div", {}, h("h3", {}, x.title), h("p", {}, txt(x.text)))))));
+}
+
+/* ---------- Code snippets ---------- */
+function snippetsBlock(snippets) {
+  const list = (snippets || []).filter((x) => hasContent(x.code));
+  if (!list.length) return null;
+  return block(list.length > 1 ? "Code" : list[0].title, "", h("div", { style: "display:grid;gap:var(--space-5)" }, list.map((x) =>
+    h("figure", { class: "snippet" },
+      hasContent(x.note) ? h("p", { class: "prose" }, txt(x.note)) : null,
+      h("div", { class: "code-frame" },
+        h("div", { class: "code-head" },
+          h("span", { class: "mono" }, x.file || x.lang || "code"),
+          isLink(x.url) ? h("a", { class: "text-link", href: x.url, target: "_blank", rel: "noopener" }, "View on GitHub", icon("external")) : null),
+        h("pre", { tabindex: "0" }, h("code", {}, x.code)))))));
 }
