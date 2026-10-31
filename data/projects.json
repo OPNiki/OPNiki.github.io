@@ -566,7 +566,7 @@
         "engine": "",
         "tools": "Blender, Bambu Studio",
         "year": "2026/27",
-        "context": "Current semester project, 3D printing course (TODO exact course name)"
+        "context": "Current semester project, Technologies Lab course"
       },
       "media": {
         "cover": "",
@@ -576,7 +576,7 @@
         },
         "gallery": []
       },
-      "overview": "This is a current semester project, so this page will grow as it develops. In this course each of us designs an object for a real everyday problem and produces it with 3D printing. At the end of the semester the results are shown at an exhibition, with the furniture brand Kartell among the guests. I'm currently working out my concept, for example a modular holder that clicks together and stops records from falling over in a shelf.",
+      "overview": "This is a current semester project, so this page will grow as it develops. In the Technologies Lab course each of us designs an object for a real everyday problem and produces it with 3D printing. At the end of the semester the results are shown at an exhibition, with the furniture brand Kartell among the guests. I'm currently working out my concept, for example a modular holder that clicks together and stops records from falling over in a shelf.",
       "built": [
         "Concept and problem research",
         "3D model in Blender, prepared for FDM printing",
