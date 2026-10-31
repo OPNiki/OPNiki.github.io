@@ -74,13 +74,19 @@ async function renderProject(root, p, featured) {
   let n = 0;
   main.querySelectorAll(".block > h2 .mono").forEach((el) => { el.textContent = String(++n).padStart(2, "0"); });
 
-  /* --- Next project (wraps around) --- */
+  /* --- Previous / next project (both wrap around) --- */
   const i = featured.findIndex((x) => x.id === p.id);
-  const next = featured[(i + 1) % featured.length];
-  if (next && next.id !== p.id) {
-    root.append(h("a", { class: "next-project reveal", href: `project.html?id=${encodeURIComponent(next.id)}` },
-      h("div", {}, h("span", { class: "mono" }, "Next project"), h("strong", {}, txt(next.title))),
-      h("span", { class: "card-arrow" }, icon("arrow"))));
+  if (i !== -1 && featured.length > 1) {
+    const prev = featured[(i - 1 + featured.length) % featured.length];
+    const next = featured[(i + 1) % featured.length];
+    const navLink = (proj, label, dir) =>
+      h("a", { class: `project-nav-link ${dir}`, href: `project.html?id=${encodeURIComponent(proj.id)}`, rel: dir },
+        dir === "prev" ? h("span", { class: "card-arrow" }, icon("arrow")) : null,
+        h("div", {}, h("span", { class: "mono" }, label), h("strong", {}, txt(proj.title))),
+        dir === "next" ? h("span", { class: "card-arrow" }, icon("arrow")) : null);
+    root.append(h("nav", { class: "project-nav reveal", "aria-label": "More projects" },
+      navLink(prev, "Previous project", "prev"),
+      navLink(next, "Next project", "next")));
   }
   root.append(h("div", { style: "height:var(--space-9)" }));
 }
