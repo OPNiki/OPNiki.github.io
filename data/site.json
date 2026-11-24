@@ -6,7 +6,8 @@
   "now": [
     "Studying Game Design & Development at Macromedia University, Cologne",
     "Working student in Enterprise Architecture Management at CONET",
-    "Working on the post-jam version of ONE MORE SPIN"
+    "ONE MORE SPIN 0.4 is out on itch.io, the next update is in the works",
+    "Building Beat Runner, a board game with a homemade ESP32 buzzer box"
   ],
   "links": {
     "itch": "https://opniki.itch.io/",
@@ -71,6 +72,7 @@
         "Java",
         "C#",
         "JavaScript",
+        "C++ (Arduino)",
         "Python",
         "Lua",
         "HTML & CSS",
@@ -93,10 +95,12 @@
       "items": [
         "Git & GitHub",
         "Gradle",
+        "ESP32 & electronics",
         "Fabric modding",
         "Bambu Studio (3D printing)",
         "Networking & system administration"
       ]
     }
-  ]
+  ],
+  "intro": "From gameplay systems and balancing tools to 3D pipelines and custom hardware. I study Game Design & Development in Cologne."
 }

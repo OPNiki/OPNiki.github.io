@@ -7,10 +7,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const [site, projects] = await Promise.all([loadSite(), loadProjects()]);
-    renderHero(site);
     const featured = projects.filter((p) => p.featured);
-    renderProjects(featured.filter((p) => p.status !== "coming-soon"));
-    renderWip(featured.filter((p) => p.status === "coming-soon"));
+    renderHero(site, featured);
+    renderParts(featured);
     renderOther(projects.filter((p) => !p.featured));
     renderExperience(site.experience || []);
     renderSkills(site.skills || []);
@@ -18,36 +17,64 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderContact(site);
   } catch (err) {
     console.error(err);
-    document.getElementById("project-grid").append(
+    document.getElementById("parts").append(
       h("p", { class: "section-sub" }, "Content could not be loaded. If you opened this file directly, start a local server (see README)."));
   }
   initReveal();
 });
 
-/* ---------- Hero ---------- */
-function renderHero(site) {
-  document.getElementById("hero-name").textContent = site.name;
-  document.getElementById("hero-role").textContent = site.role;
-  document.getElementById("hero-tagline").textContent = site.tagline;
-  if (site.location) document.getElementById("hero-location").textContent = site.location;
+/* ---------- Hero: intro, title block, project index with preview ---------- */
+function renderHero(site, featured) {
+  document.getElementById("hero-tagline").textContent = site.intro || site.tagline;
+
+  const block = document.getElementById("hero-block");
+  const cell = (k, v, wide) => h("div", { class: wide ? "wide" : null }, h("dt", {}, k), h("dd", {}, v));
+  block.append(
+    cell("Name", site.name), cell("Based in", site.location || ""),
+    cell("Role", site.role, true),
+    cell("Right now", h("ul", { class: "now-list" }, (site.now || []).map((n) => h("li", {}, txt(n)))), true));
 
   const actions = document.getElementById("hero-actions");
-  if (isLink(site.cv)) {
-    actions.append(h("a", { class: "btn", href: site.cv, download: "" }, icon("download"), "Download CV"));
-  }
+  if (isLink(site.cv)) actions.append(h("a", { class: "btn", href: site.cv, download: "" }, icon("download"), "CV"));
   actions.append(h("div", { class: "hero-social" }, socialLinks(site.links)));
 
-  const list = document.getElementById("now-list");
-  (site.now || []).forEach((item) => { const t = txt(item); if (t) list.append(h("li", {}, h("span", {}, t))); });
+  // index rows; the active row gets the caret and drives the preview figure
+  const preview = document.getElementById("hero-preview");
+  const previewImg = h("img", { alt: "", decoding: "async" });
+  const caption = h("figcaption", { class: "fig-caption" });
+  preview.append(h("div", { class: "preview-stage" }, previewImg), caption);
+  // non-16:9 covers (square board, portrait phone game) are shown whole
+  previewImg.addEventListener("load", () =>
+    preview.classList.toggle("fit", Math.abs(previewImg.naturalWidth / previewImg.naturalHeight - 16 / 9) > 0.15));
+
+  const rows = featured.map((p, i) => {
+    const a = h("a", { href: `project.html?id=${encodeURIComponent(p.id)}` },
+      h("span", { class: "idx-caret", "aria-hidden": "true" }, ">"),
+      h("span", { class: "idx-title" }, txt(p.title)),
+      h("span", { class: "idx-meta" }, p.status === "coming-soon" ? "In progress" : (p.tech || []).slice(0, 2).join(" · ")));
+    const show = () => {
+      rows.forEach((r) => r.classList.toggle("is-active", r === li));
+      const c = p.media && p.media.cover;
+      if (!c || !c.src) return;
+      previewImg.src = c.src;
+      previewImg.className = c.pixel ? "pixel" : "";
+      caption.replaceChildren(h("span", {}, `Fig. ${i + 1} · ${p.title}`), h("span", {}, (p.tech || []).join(" · ")));
+    };
+    a.addEventListener("pointerenter", show);
+    a.addEventListener("focus", show);
+    const li = h("li", {}, a);
+    li.show = show;
+    return li;
+  });
+  document.getElementById("hero-index").append(...rows);
+  if (rows[0]) rows[0].show();
 }
 
-/* ---------- Featured projects + filters ---------- */
-function renderProjects(projects) {
-  const grid = document.getElementById("project-grid");
-  const cards = projects.map((p, i) => projectCard(p, i));
-  grid.append(...cards);
+/* ---------- Parts list: one row per featured project ---------- */
+function renderParts(projects) {
+  const list = document.getElementById("parts");
+  list.append(...projects.map((p, i) => partRow(p, i)));
 
-  // filter buttons: "All" + every category used by the featured projects
   const cats = [...new Set(projects.flatMap((p) => p.categories || []))];
   const filters = document.getElementById("filters");
   ["All", ...cats].forEach((cat) => {
@@ -56,53 +83,23 @@ function renderProjects(projects) {
       onclick: (e) => {
         filters.querySelectorAll(".filter").forEach((b) => b.setAttribute("aria-pressed", "false"));
         e.currentTarget.setAttribute("aria-pressed", "true");
-        applyFilter(grid, cat);
+        list.querySelectorAll(".part").forEach((row) =>
+          row.classList.toggle("is-hidden", cat !== "All" && !(row.dataset.categories || "").split("|").includes(cat)));
       },
     }, cat));
   });
 }
 
-/* ---------- In progress (coming-soon projects get their own row) ---------- */
-function renderWip(projects) {
-  const section = document.getElementById("wip");
-  if (!projects.length) { section.hidden = true; return; }
-  document.getElementById("wip-grid").append(...projects.map((p, i) => projectCard(p, i + 1)));
-}
-
-/* FLIP animation: remember positions, change layout, animate from old to new */
-function applyFilter(grid, cat) {
-  const cards = [...grid.children];
-  const before = new Map(cards.map((c) => [c, c.getBoundingClientRect()]));
-  cards.forEach((c) => {
-    const show = cat === "All" || (c.dataset.categories || "").split("|").includes(cat);
-    c.classList.toggle("is-hidden", !show);
-  });
-  if (REDUCED_MOTION) return;
-  cards.filter((c) => !c.classList.contains("is-hidden")).forEach((c) => {
-    const old = before.get(c);
-    const now = c.getBoundingClientRect();
-    if (!old || old.width === 0) {
-      c.animate([{ opacity: 0, transform: "scale(0.96)" }, { opacity: 1, transform: "none" }], { duration: 350, easing: "cubic-bezier(.2,.7,.2,1)" });
-      return;
-    }
-    const dx = old.left - now.left, dy = old.top - now.top;
-    const sx = old.width / now.width, sy = old.height / now.height;
-    c.animate([
-      { transformOrigin: "top left", transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})` },
-      { transformOrigin: "top left", transform: "none" },
-    ], { duration: 450, easing: "cubic-bezier(.2,.7,.2,1)" });
-  });
-}
-
-function statusBadge(p) {
-  if (p.status === "coming-soon") return h("span", { class: "badge soon" }, p.statusNote || "Coming soon");
-  if (p.status === "in-development") return h("span", { class: "badge" }, "In development");
-  return null;
-}
-
-function projectCard(p, i) {
-  const media = h("div", { class: "card-media" },
-    img(p.media && p.media.cover, { title: p.title, eager: i === 0 }));
+function partRow(p, i) {
+  const f = p.facts || {};
+  const href = `project.html?id=${encodeURIComponent(p.id)}`;
+  const media = h("div", { class: "part-media" }, img(p.media && p.media.cover, { title: p.title, eager: i === 0 }));
+  // covers that are not 16:9 (square board, portrait phone game) are shown whole instead of cropped
+  const cover = media.querySelector("img");
+  if (cover) {
+    const fit = () => cover.naturalWidth && media.classList.toggle("fit", Math.abs(cover.naturalWidth / cover.naturalHeight - 16 / 9) > 0.15);
+    cover.complete ? fit() : cover.addEventListener("load", fit, { once: true });
+  }
 
   // optional hover video – only loaded on first hover
   let video = null;
@@ -112,81 +109,71 @@ function projectCard(p, i) {
     media.append(video);
   }
 
-  const card = h("article", {
-    class: `card reveal${p.status === "coming-soon" ? " is-soon" : ""}`,
-    "data-categories": (p.categories || []).join("|"),
-  },
-    media,
-    h("div", { class: "card-body" },
-      h("h3", { class: "card-title" }, txt(p.title), statusBadge(p)),
-      h("p", { class: "card-tagline" }, txt(p.tagline)),
-      h("div", { class: "card-foot" },
-        h("div", { class: "chips" }, (p.tech || []).filter(hasContent).map((t) => h("span", { class: "chip" }, txt(t)))),
-        h("span", { class: "card-arrow" }, icon("arrow")))),
-    h("a", { class: "card-link", href: `project.html?id=${encodeURIComponent(p.id)}`, "aria-label": `View project: ${p.title}` }));
+  const cell = (k, v) => hasContent(v) ? h("div", {}, h("dt", {}, k), h("dd", {}, txt(v))) : null;
+  const specs = [cell("Role", f.role && shortRole(f.role)), cell("Team", f.team && shortTeam(f.team)),
+    cell("Engine", f.engine), cell("Duration", f.duration)].filter(Boolean);
+  if (specs.length % 2) specs[specs.length - 1].classList.add("wide");
 
-  // cursor glow: update CSS variables with the mouse position
-  if (!REDUCED_MOTION) {
-    card.addEventListener("pointermove", (e) => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-      card.style.setProperty("--my", `${e.clientY - r.top}px`);
-    });
-  }
+  const row = h("article", { class: "part reveal", "data-categories": (p.categories || []).join("|") },
+    media,
+    h("div", { class: "part-body" },
+      h("h3", { class: "part-title" }, h("a", { href }, txt(p.title))),
+      statusTag(p) ? h("div", {}, statusTag(p)) : null,
+      h("p", { class: "part-tagline" }, txt(p.tagline)),
+      partnerLogo(p.partners),
+      specs.length ? h("dl", { class: "tblock" }, specs) : null,
+      h("p", { class: "tech" }, (p.tech || []).filter(hasContent).join(" · ")),
+      h("span", { class: "part-open" }, "Open project", icon("arrow"))));
+
   if (video) {
-    card.addEventListener("pointerenter", () => {
+    row.addEventListener("pointerenter", () => {
       if (!video.src) video.src = video.dataset.src;
-      video.play().then(() => card.classList.add("playing")).catch(() => {});
+      video.play().then(() => row.classList.add("playing")).catch(() => {});
     });
-    card.addEventListener("pointerleave", () => { video.pause(); card.classList.remove("playing"); });
+    row.addEventListener("pointerleave", () => { video.pause(); row.classList.remove("playing"); });
   }
-  return card;
+  return row;
 }
+
+/* The full role/team texts live on the project page; the list shows the first clause */
+const shortRole = (s) => s.split(/[.;]/)[0];
+const shortTeam = (s) => s.split(":")[0];
 
 /* ---------- Other work ---------- */
 function renderOther(projects) {
   const section = document.getElementById("other");
   if (!projects.length) { section.hidden = true; return; }
-  const grid = document.getElementById("other-grid");
+  const list = document.getElementById("other-list");
   projects.forEach((p) => {
     const images = [p.media && p.media.cover, ...((p.media && p.media.gallery) || [])].filter((m) => m && m.src);
-    grid.append(h("article", { class: "mini-card reveal" },
-      h("button", {
-        class: "mini-media", type: "button", "aria-label": `Show screenshots of ${p.title}`,
-        onclick: () => Lightbox.open(images, 0),
-      }, img(p.media && p.media.cover, { title: p.title })),
-      h("div", { class: "mini-body" },
+    list.append(h("article", { class: "other-row reveal" },
+      h("button", { type: "button", "aria-label": `Show screenshots of ${p.title}`, onclick: () => Lightbox.open(images, 0) },
+        img(p.media && p.media.cover, { title: p.title })),
+      h("div", {},
         h("h3", {}, txt(p.title)),
         h("p", {}, txt(p.tagline)),
-        h("div", { class: "mini-actions" },
-          h("div", { class: "chips" }, (p.tech || []).filter(hasContent).map((t) => h("span", { class: "chip" }, txt(t)))),
-          p.links && isLink(p.links.play)
-            ? h("a", { class: "text-link", href: p.links.play, target: "_blank", rel: "noopener" }, "Play", icon("external"))
-            : null))));
+        h("p", { class: "tech" }, (p.tech || []).filter(hasContent).join(" · "))),
+      p.links && isLink(p.links.play)
+        ? h("a", { class: "btn", href: p.links.play, target: "_blank", rel: "noopener" }, "Play", icon("external"))
+        : null));
   });
 }
 
 /* ---------- Experience ---------- */
 function renderExperience(items) {
-  const tl = document.getElementById("timeline");
-  items.forEach((x) => {
-    tl.append(h("div", { class: "tl-item reveal" },
-      h("div", { class: "tl-period mono" }, txt(x.period)),
-      h("div", {},
-        h("h3", {}, txt(x.title)),
-        h("div", { class: "tl-org" }, txt(x.org)),
-        hasContent(x.text) ? h("p", { class: "tl-text" }, txt(x.text)) : null)));
-  });
+  const body = document.getElementById("timeline");
+  items.forEach((x) => body.append(h("tr", {},
+    h("td", { class: "period" }, txt(x.period)),
+    h("td", {}, h("strong", {}, txt(x.title)), h("span", { class: "org" }, txt(x.org))),
+    h("td", {}, hasContent(x.text) ? h("span", { class: "note" }, txt(x.text)) : null))));
 }
 
 /* ---------- Skills ---------- */
 function renderSkills(groups) {
-  const grid = document.getElementById("skills-grid");
-  groups.forEach((g) => {
-    grid.append(h("div", { class: "skill-group reveal" },
-      h("h3", {}, g.group, h("span", { class: "mono" }, String(g.items.length).padStart(2, "0"))),
-      h("div", { class: "chips" }, g.items.map((s) => h("span", { class: "chip" }, s)))));
-  });
+  const body = document.getElementById("skills-body");
+  groups.forEach((g) => body.append(h("tr", {},
+    h("td", { class: "group" }, g.group),
+    h("td", {}, g.items.join(" · ")))));
 }
 
 /* ---------- About ---------- */
@@ -195,16 +182,16 @@ function renderAbout(site) {
   (site.about || []).forEach((p) => { const t = txt(p); if (t) text.append(h("p", {}, t)); });
 
   const meta = document.getElementById("about-meta");
-  const row = (label, value) => h("div", { class: "meta-row" }, h("span", { class: "mono" }, label), h("span", {}, value));
-  if (site.location) meta.append(row("Based in", site.location));
-  if (site.languages && site.languages.length) meta.append(row("Languages", site.languages.join(" · ")));
-  meta.append(row("Background", "IT systems integration → game development"));
+  const cell = (k, v) => h("div", { class: "wide" }, h("dt", {}, k), h("dd", {}, v));
+  if (site.location) meta.append(cell("Based in", site.location));
+  if (site.languages && site.languages.length) meta.append(cell("Languages", site.languages.join(" · ")));
+  meta.append(cell("Background", "IT systems integration → game development"));
 }
 
 /* ---------- Contact + footer links ---------- */
 function renderContact(site) {
   const box = document.getElementById("contact-actions");
-  const mail = emailButton(site.email);
+  const mail = emailButton(site.email, "Write me an email");
   if (mail) box.append(mail);
   if (isLink(site.links.linkedin)) box.append(h("a", { class: "btn", href: site.links.linkedin, target: "_blank", rel: "noopener" }, icon("linkedin"), "LinkedIn"));
   if (isLink(site.links.github)) box.append(h("a", { class: "btn", href: site.links.github, target: "_blank", rel: "noopener" }, icon("github"), "GitHub"));
@@ -224,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     entries.forEach((e) => {
       const link = links.find((a) => a.getAttribute("href") === `#${e.target.id}`);
       if (e.isIntersecting) links.forEach((a) => a.classList.toggle("active", a === link));
-      else if (link) link.classList.remove("active"); // e.g. back in the hero: nothing highlighted
+      else if (link) link.classList.remove("active");
     });
   }, { rootMargin: "-45% 0px -50% 0px" });
   links.forEach((a) => { const s = document.querySelector(a.getAttribute("href")); if (s) io.observe(s); });

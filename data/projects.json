@@ -5,9 +5,9 @@
       "featured": true,
       "order": 1,
       "status": "in-development",
-      "statusNote": "Post-jam version in development",
+      "statusNote": "Version 0.4.1, still in development",
       "title": "ONE MORE SPIN",
-      "tagline": "Roulette meets roguelike. Made in 6 days for a game jam and now in post-jam development.",
+      "tagline": "A roulette roguelike. Started as a six-day jam game, now at version 0.4 with 9 suitcases, 17 lucky charms and an endless mode.",
       "categories": [
         "Programming",
         "Game Design"
@@ -17,63 +17,103 @@
         "GDScript"
       ],
       "facts": {
-        "role": "Programming and game design. We split the work 50/50 and both worked on every part.",
+        "role": "Programming, game design and pixel art. In the jam we split the work 50/50; after it I also took over the art.",
         "team": "2 (with CuzImMarrc)",
-        "duration": "6 days (jam) + ongoing post-jam development",
+        "duration": "6 days for the jam (June 2026), post-jam development since then",
         "engine": "Godot 4",
-        "tools": "GDScript, Git/GitHub",
+        "tools": "GDScript, Python (balancing simulator), Aseprite, Git/GitHub",
         "year": "2026",
-        "context": "Game jam (The Very Serious Juniper Dev Game Jam)"
+        "context": "Game jam (The Very Serious Juniper Dev Game Jam), then post-jam updates on itch.io"
       },
       "media": {
         "cover": {
-          "src": "assets/one-more-spin/gameplay-win.webp",
-          "alt": "ONE MORE SPIN gameplay: roulette table with a +130 payout popping over the wheel",
+          "src": "assets/one-more-spin/v04-table.webp",
+          "alt": "ONE MORE SPIN 0.4: roulette wheel, betting table with raised field values and the quota panel",
           "pixel": true
         },
-        "loop": "",
+        "loop": "assets/one-more-spin/loop.mp4",
         "video": {
           "youtubeId": ""
         },
         "gallery": [
           {
+            "src": "assets/one-more-spin/v04-table.webp",
+            "alt": "The table in round 4: every placed chip has raised the values of its fields for the rest of the run",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/v04-scoring.webp",
+            "alt": "A spin lands and pays out +480",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/v04-shop.webp",
+            "alt": "The shop between quotas: lucky charms, chip upgrades and CONVERT",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/v04-suitcases.webp",
+            "alt": "NEW RUN board: picking a suitcase and a stake",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/v04-loaded-wheel.webp",
+            "alt": "LOADED WHEEL suitcase: the croupier tells you five numbers the ball will land on",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/v04-jackpot.webp",
+            "alt": "JACKPOT screen after beating all ten quotas, with the cheque from the house",
+            "pixel": true
+          },
+          {
+            "src": "assets/one-more-spin/v04-title.webp",
+            "alt": "Title screen with the casino crowd",
+            "pixel": true
+          },
+          {
             "src": "assets/one-more-spin/gameplay-win.webp",
-            "alt": "A winning spin with a +130 payout, quota and round tracker on the right",
-            "pixel": true
-          },
-          {
-            "src": "assets/one-more-spin/gameplay-result.webp",
-            "alt": "The ball lands on 34, with chips on red and on single numbers",
-            "pixel": true
-          },
-          {
-            "src": "assets/one-more-spin/shop.webp",
-            "alt": "Between-round shop with relics and chip upgrades bought with coins",
-            "pixel": true
-          },
-          {
-            "src": "assets/one-more-spin/main-menu.webp",
-            "alt": "Main menu with Play, Options and Quit",
-            "pixel": true
-          },
-          {
-            "src": "assets/one-more-spin/cover-itch.webp",
-            "alt": "ONE MORE SPIN cover art with roulette wheel and casino chips",
+            "alt": "The jam version from June 2026, for comparison",
             "pixel": true
           }
-        ]
+        ],
+        "callouts": [
+          {
+            "x": 50,
+            "y": 27,
+            "label": "Wheel with its own seeded random stream"
+          },
+          {
+            "x": 80,
+            "y": 22,
+            "label": "Quota, spins, coins and ball multiplier"
+          },
+          {
+            "x": 42,
+            "y": 72,
+            "label": "Every chip raises its fields for the whole run"
+          },
+          {
+            "x": 88,
+            "y": 72,
+            "label": "Suitcase: 32 chips, shuffled every quota"
+          }
+        ],
+        "trailer": "assets/one-more-spin/trailer.mp4"
       },
-      "overview": "ONE MORE SPIN turns European roulette into a roguelike. Every round you get a few spins to reach a score quota. You place chips on numbers and outside bets, and between rounds you spend coins in a shop on relics and chip upgrades that change your odds. The jam themes were \"Spin to Win\" and \"Very Serious\". We built the jam version in six days as a team of two and kept working on it after the jam.",
+      "overview": "ONE MORE SPIN turns European roulette into a roguelike. Every spin you draw chips from your suitcase and place them on the table. Each chip raises the value of its fields for the rest of the run, so the table keeps getting stronger. Then you spin: field value × ball multiplier × lucky charms has to beat a quota, ten quotas in a row. We made the first version in six days for a game jam as a team of two and kept going. Version 0.3 added 9 suitcases, 4 stakes, 17 lucky charms, green numbers, a tutorial, a German translation and a full visual overhaul. Version 0.4 added an endless mode and saving in the middle of a run.",
       "built": [
-        "GameManager singleton that keeps track of rounds, spins, quota, coins and progression",
-        "Bet system that stores all active bets in a list, so you can place as many chips as you like and each one is resolved on its own",
-        "Drag and drop for placing chips on the table",
-        "Animated feedback with Tweens, like payout popups and a quota counter that counts up",
-        "Shop between rounds with relics and chip upgrades",
-        "Options menu with separate music and SFX volume, saved with ConfigFile and reachable from the main menu and the pause menu"
+        "GameManager autoload that holds rounds, spins, quotas, coins and every run rule. All randomness goes through named, seeded streams, so any run can be replayed from its 8-digit seed",
+        "A balancing simulator in Python that copies the game's rules and lets three kinds of bots play thousands of runs. Every new suitcase, stake and charm went through it before it went into the game",
+        "9 suitcases and 4 stakes with their own rules, unlocked one by one and stored in a progress file",
+        "17 lucky charms that hook into scoring: colour streaks, wheel neighbours, green numbers, double or nothing",
+        "Endless mode with float scores and short number formats (1.25M, 1.4e17) once a run grows past the integer limit",
+        "Auto-save at five points in a run, so you can close the browser and continue later",
+        "Headless tests: a seed test that checks every random call and a smoke test that plays every suitcase into the shop, over 300 checks in total",
+        "Tutorial with the croupier, English and German, tooltips for every chip, charm and suitcase"
       ],
-      "challenge": "In our first version the UI updated the moment a spin was resolved. The numbers changed before the animations had even played, so the game felt out of sync and sometimes jumped to the next round too early. We fixed this by separating the game state from what is shown on screen. The state updates right away, but the labels only change once a Tween has finished, and the next step (overlay, win sound, next round) is started by a callback at the end of the animation. Spins became much easier to follow and a few round counting bugs disappeared along the way.",
-      "differently": "Roulette only gives you one number per spin, so there aren't many things that can trigger at once. In games like Balatro a good hand sets off a long chain of effects, and that is a big part of why they feel so satisfying. For the post-jam version I'm working on modifiers that each trigger separately, so a strong late-game spin turns into a chain of payouts instead of one big number.",
+      "challenge": "With 9 suitcases, 4 stakes and 17 charms there are far too many combinations to balance by playing. So before any new content went into the game, it went into the simulator first. The first numbers were way off: one suitcase won 100% of the bot runs, TWIN BALL only 5%, and a planned charm called CHAMELEON made runs 37% worse. We tuned the values until every suitcase landed at roughly 70 to 80% for the strongest bot on the base stake and each stake lowered that step by step (71, 38, 25 and 18%). CHAMELEON was cut. Only then did we build the content into the game, with the numbers from the simulator.",
+      "differently": "For the jam we balanced by feel, and the post-jam content only came together once the simulator existed. Next time I would build a small simulator in the first week, as soon as the core loop stands, so a design idea can be checked in minutes instead of after a whole playtest.",
       "links": {
         "play": "https://opniki.itch.io/one-more-spin",
         "code": "",
@@ -107,36 +147,80 @@
           "text": "We added Tween animations for payouts and the quota counter, a quota overlay, chip and win sounds, drag and drop chips that stay on top while dragging, and an options and pause menu with saved volume settings."
         },
         {
-          "when": "After the jam",
-          "title": "Two versions on itch.io and a new scoring idea",
-          "text": "The jam version and the post-jam version are both available on itch.io. For the post-jam version we're working on modifiers that trigger one after another, so strong spins build up into a chain of payouts."
+          "when": "Plan",
+          "title": "One big update instead of small patches",
+          "text": "After three rounds of team feedback we wrote a content plan: 9 suitcases, 4 stakes, green numbers and new lucky charms. We decided to ship all of it in one update and collect feedback after that, instead of patching in small steps."
+        },
+        {
+          "when": "Balancing",
+          "title": "Simulator first, game second",
+          "text": "Every new feature was built into the Python simulator before it touched the game. The bots played thousands of runs per change, and the team only discussed values once the numbers were in."
+        },
+        {
+          "when": "0.3.0",
+          "title": "The post-jam update",
+          "text": "Released in November 2026 with the new content, music, a tutorial with the croupier, a German translation and a complete visual overhaul: suitcases with their own colours and emblems, stakes as luggage tags, a new shop and new charm icons."
+        },
+        {
+          "when": "0.4.0",
+          "title": "Endless and continue",
+          "text": "The two most requested features from players: keep spinning after you beat the house, and quit in the middle of a run and continue later. Beating a suitcase on the hardest stake now turns it gold."
         }
       ],
       "flow": {
         "title": "What happens during one spin",
         "steps": [
           {
-            "title": "Place chips",
-            "text": "Every table field has a bet_type. Dropping a chip calls GameManager.place_bet()."
+            "title": "Draw",
+            "text": "Four chips come from your suitcase into your hand. The suitcase is shuffled again for every quota."
           },
           {
-            "title": "Store bets",
-            "text": "Each bet goes into an active_bets list, so any number of chips can be on the table."
+            "title": "Place",
+            "text": "White, red, blue and black chips raise groups, blocks, columns or the multiplier, for the whole run."
           },
           {
             "title": "Spin",
-            "text": "GameManager.spin() picks the winning number."
+            "text": "The ball picks a number through the seeded wheel stream, so the same seed always gives the same run."
           },
           {
-            "title": "Resolve",
-            "text": "Every bet in the list is checked on its own and adds to the score."
+            "title": "Score",
+            "text": "Field value × ball multiplier × lucky charms. Number and group values stay separate until this step."
           },
           {
-            "title": "Animate",
-            "text": "The UI plays Tweens and only moves on to the overlay or next round when the animation's callback fires."
+            "title": "Quota",
+            "text": "Beat the quota and you go to the shop. Miss it after the last spin and the run is over."
           }
         ]
-      }
+      },
+      "snippets": [
+        {
+          "title": "Round quotas",
+          "file": "game_manager.gd",
+          "lang": "gdscript",
+          "url": "",
+          "note": "Suitcases and stakes multiply the base quotas, which gives numbers like 1,437. This rounds them to the biggest 10 or 25 step that changes the value by at most 2.5%, so a quota always reads as a clean target. The simulator uses the same function.",
+          "code": "func nice_quota(v: float) -> float:\n\tvar lim: float = v / 20.0\n\tvar step: float = 10.0\n\tif lim >= 10.0:\n\t\tvar p: float = pow(10.0, floor(log(lim) / log(10.0) + 1e-9))\n\t\tstep = 2.5 * p if 2.5 * p <= lim else p\n\treturn maxf(step, round(v / step) * step)"
+        }
+      ],
+      "revisions": [
+        {
+          "v": "Jam",
+          "date": "Jun 2026"
+        },
+        {
+          "v": "0.3.0",
+          "date": "20 Nov 2026"
+        },
+        {
+          "v": "0.4.0",
+          "date": "21 Nov 2026"
+        },
+        {
+          "v": "0.4.1",
+          "date": "21 Nov 2026",
+          "now": true
+        }
+      ]
     },
     {
       "id": "camping-diorama",
@@ -285,8 +369,8 @@
       ],
       "media": {
         "cover": {
-          "src": "assets/fabric-mods/all-items-overview.webp",
-          "alt": "All Items overview grid showing collected, skipped and remaining items",
+          "src": "assets/fabric-mods/cover-16x9.webp",
+          "alt": "Challenge Timer and All Items in Minecraft: item HUD, item overview and the red run timer",
           "pixel": false
         },
         "loop": "",
@@ -385,10 +469,9 @@
       },
       "media": {
         "cover": {
-          "src": "assets/campus-balance-run/title-screen.webp",
-          "alt": "Campus Balance Run title screen with the sprout mascot running across campus",
-          "pixel": false,
-          "position": "center 30%"
+          "src": "assets/campus-balance-run/cover-16x9.webp",
+          "alt": "Campus Balance Run on three phone screens: title, running down a corridor, results",
+          "pixel": false
         },
         "loop": "",
         "video": {
@@ -439,6 +522,13 @@
             "icon": "external"
           }
         ]
+      },
+      "partners": {
+        "label": "Made for",
+        "logo": {
+          "src": "assets/campus-balance-run/partners-logo.webp",
+          "alt": "Ashoka × Campus Wellbeing Project"
+        }
       }
     },
     {
@@ -447,47 +537,89 @@
       "order": 5,
       "status": "coming-soon",
       "statusNote": "In progress, due January 2027",
-      "title": "Rhythm Board Game",
-      "tagline": "A racing board game with a homemade ESP32 buzzer box. No PC needed.",
+      "title": "Beat Runner",
+      "tagline": "A racing board game where you move by playing melodies back on a homemade ESP32 buzzer box. No PC, no app.",
       "categories": [
         "Game Design",
         "Hardware"
       ],
       "tech": [
         "ESP32",
-        "C++ (Arduino)"
+        "C++ (Arduino)",
+        "Blender"
       ],
       "facts": {
-        "role": "Solo (game design, electronics and programming)",
+        "role": "Solo: game design, board design, electronics, 3D-printed case and code",
         "team": "1",
-        "duration": "TODO duration",
+        "duration": "Since October 2026, due January 2027",
         "engine": "ESP32 (Arduino)",
-        "tools": "TODO tools",
+        "tools": "Arduino IDE, Blender, Bambu Studio, Python (game simulation)",
         "year": "2026/27",
-        "context": "Current semester project, Game Design 1 board game course"
+        "context": "University, Game Design 1 board game course"
       },
       "media": {
-        "cover": "",
+        "cover": {
+          "src": "assets/beat-runner/cover-16x9.webp",
+          "alt": "Beat Runner: the vinyl record board and the four music-note pieces",
+          "pixel": false
+        },
         "loop": "",
         "video": {
           "youtubeId": ""
         },
-        "gallery": []
+        "gallery": [
+          {
+            "src": "assets/beat-runner/board.webp",
+            "alt": "Board design A \"Vinyl Groove\", 50 × 50 cm",
+            "pixel": false
+          },
+          {
+            "src": "assets/beat-runner/figures.webp",
+            "alt": "The four player pieces as music notes, each with its own shape and colour",
+            "pixel": false
+          },
+          {
+            "src": "assets/beat-runner/colour-check.webp",
+            "alt": "Colour check of the board for protanopia, deuteranopia, tritanopia and greyscale",
+            "pixel": false
+          }
+        ]
       },
-      "overview": "This is a current semester project, so this page will grow as it develops. Players race to the finish. Each turn they pick 1, 2 or 3 spaces (easy, medium or hard) on a buzzer box, then have to remember and repeat a Simon Says sequence to move.",
+      "overview": "This is a current semester project, so the page grows as it develops. Two to four players race to the finish. On your turn you pick Easy, Medium or Hard (1, 2 or 3 spaces), the Beat Box plays a short melody and you play it back in rhythm on four coloured arcade buttons. Get it right and you move. Miss it and anyone else can steal the spaces by playing it back first, so everybody listens on every turn. The board is a vinyl record: the track runs along the groove and the finish is the label in the middle.",
       "built": [
-        "Game design and board design",
-        "Custom ESP32 controller with buzzers and LEDs",
-        "TODO"
+        "Beat Box hardware: ESP32, four arcade buttons with lamps, I2S amplifier and speaker, running on a power bank. Wired and tested",
+        "A case for the box, modelled in Blender: six printed parts that click together without screws and a lid that snaps on",
+        "A browser prototype of the full rules (now version 8) to play the game before the hardware is finished",
+        "A simulation of thousands of games to set the melody lengths and the length of the board",
+        "The board design \"Vinyl Groove\", checked for colour blindness: every button and special space also carries dots or a symbol"
       ],
-      "challenge": "TODO",
-      "differently": "TODO",
+      "challenge": "In the first rules Hard meant 7 to 8 notes. The simulation showed that this was a trap: players who always picked Medium won 31% of games, players who always picked Hard only 14%, and every failed Hard turn handed three spaces to whoever stole it. With Easy at 3 to 4 notes, Medium at 5 to 6 and Hard at 7, both strategies end up close together (27% and 22%) and switching between them works best. The same simulation set the board to 32 spaces, eight bars of four, which gives about 20 to 25 minutes for three or four players.",
+      "differently": "",
       "links": {
         "play": "",
         "code": "",
         "download": "",
         "video": ""
-      }
+      },
+      "revisions": [
+        {
+          "v": "Concept",
+          "date": "Oct 2026"
+        },
+        {
+          "v": "Hardware works",
+          "date": "15 Nov 2026"
+        },
+        {
+          "v": "Box modelled",
+          "date": "22 Nov 2026",
+          "now": true
+        },
+        {
+          "v": "Due",
+          "date": "Jan 2027"
+        }
+      ]
     },
     {
       "id": "pacgame",
@@ -506,9 +638,9 @@
       ],
       "media": {
         "cover": {
-          "src": "assets/pacgame/cover.webp",
-          "alt": "PACGAME cover with the player on a checkerboard grid",
-          "pixel": true
+          "src": "assets/pacgame/cover-16x9.webp",
+          "alt": "PACGAME: the PICO-8 original next to the Unity remake",
+          "pixel": false
         },
         "gallery": [
           {
@@ -540,55 +672,6 @@
       },
       "links": {
         "play": "https://opniki.itch.io/pacgame"
-      }
-    },
-    {
-      "id": "product-3d-print",
-      "featured": true,
-      "order": 6,
-      "status": "coming-soon",
-      "statusNote": "In progress",
-      "title": "3D Printed Everyday Object",
-      "tagline": "Designing a 3D printable object that solves a real everyday problem, shown at an exhibition with Kartell.",
-      "categories": [
-        "Tech Art / 3D",
-        "Hardware"
-      ],
-      "tech": [
-        "Blender",
-        "Bambu Studio",
-        "FDM printing"
-      ],
-      "facts": {
-        "role": "Solo, concept, 3D modelling and printing",
-        "team": "1",
-        "duration": "Current semester",
-        "engine": "",
-        "tools": "Blender, Bambu Studio",
-        "year": "2026/27",
-        "context": "Current semester project, Technologies Lab course"
-      },
-      "media": {
-        "cover": "",
-        "loop": "",
-        "video": {
-          "youtubeId": ""
-        },
-        "gallery": []
-      },
-      "overview": "This is a current semester project, so this page will grow as it develops. In the Technologies Lab course each of us designs an object for a real everyday problem and produces it with 3D printing. At the end of the semester the results are shown at an exhibition, with the furniture brand Kartell among the guests. I'm currently working out my concept, for example a modular holder that clicks together and stops records from falling over in a shelf.",
-      "built": [
-        "Concept and problem research",
-        "3D model in Blender, prepared for FDM printing",
-        "Test prints and iterations in Bambu Studio"
-      ],
-      "challenge": "",
-      "differently": "",
-      "links": {
-        "play": "",
-        "code": "",
-        "download": "",
-        "video": ""
       }
     }
   ]

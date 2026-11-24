@@ -4,22 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Niklas Lang | Technical Game Developer</title>
-  <meta name="description" content="Portfolio of Niklas Lang, technical game developer from Cologne. Gameplay systems, 3D pipelines, mods and game jam projects.">
+  <meta name="description" content="Portfolio of Niklas Lang, technical game developer from Cologne. Gameplay systems, balancing tools, 3D pipelines and custom hardware.">
   <meta property="og:title" content="Niklas Lang | Technical Game Developer">
-  <meta property="og:description" content="Gameplay systems, 3D pipelines, mods and game jam projects.">
+  <meta property="og:description" content="Gameplay systems, balancing tools, 3D pipelines and custom hardware.">
   <meta property="og:url" content="https://opniki.github.io/">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://opniki.github.io/assets/camping-diorama/cover.webp">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233ddbd9'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' text-anchor='middle' fill='%23062625'%3ENL%3C/text%3E%3C/svg%3E">
-  <link rel="preload" href="assets/fonts/space-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <!-- Set the theme before first paint, so there is no flash of the wrong theme -->
+  <meta property="og:image" content="https://opniki.github.io/assets/og.jpg">
+  <meta name="theme-color" content="#101416">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23121517'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' text-anchor='middle' fill='%233ddbd9'%3E%3Enl%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Theme and JS flag before first paint, so nothing flashes -->
   <script>
     (function () {
       var t = null;
       try { t = localStorage.getItem("theme"); } catch (e) {}
-      if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      if (!t) t = "dark"; // dark by default, the toggle switches to the light sheet
       document.documentElement.setAttribute("data-theme", t);
+      document.documentElement.classList.add("js");
     })();
   </script>
   <link rel="stylesheet" href="css/style.css">
@@ -29,7 +30,7 @@
 
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="index.html" aria-label="Niklas Lang, home"><span class="brand-mark">NL</span><span>Niklas Lang</span></a>
+      <a class="brand" href="index.html" aria-label="Niklas Lang, home"><span class="brand-mark" aria-hidden="true">&gt;nl</span><span>Niklas Lang</span></a>
       <nav class="nav" id="nav" aria-label="Main">
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
@@ -38,106 +39,89 @@
         <a href="#contact">Contact</a>
       </nav>
       <button class="icon-btn menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
-      <button class="icon-btn theme-toggle" type="button" aria-label="Toggle light and dark theme">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <button class="icon-btn theme-toggle" type="button" aria-label="Switch between light and dark sheet">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </button>
     </div>
   </header>
 
   <main id="main">
-    <!-- Hero – filled from data/site.json -->
+    <!-- Hero: who I am first, then an index of the projects. Hovering an
+         index row swaps the preview figure on the right. -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="container hero-grid">
-        <div>
-          <span class="hero-label mono reveal"><span class="dot"></span><span id="hero-location">Cologne, Germany</span></span>
-          <h1 id="hero-title" class="reveal"><span id="hero-name">Niklas Lang</span><span class="role" id="hero-role"></span></h1>
-          <p class="hero-tagline reveal" id="hero-tagline"></p>
-          <div class="hero-actions reveal" id="hero-actions">
-            <a class="btn btn-primary" href="#projects">View projects <span aria-hidden="true" style="display:contents"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14m0 0-6-6m6 6 6-6"/></svg></span></a>
+        <div class="hero-main">
+          <h1 id="hero-title">I build the technical side of games</h1>
+          <p class="hero-tagline" id="hero-tagline"></p>
+          <div class="hero-actions" id="hero-actions">
+            <a class="btn btn-primary" href="#projects">View projects</a>
           </div>
+          <nav class="index" aria-label="Project index"><ol id="hero-index"></ol></nav>
         </div>
-        <aside class="now-card reveal" aria-labelledby="now-title">
-          <h2 id="now-title">Right now</h2>
-          <ul id="now-list"></ul>
-        </aside>
+        <div class="hero-side">
+          <figure class="preview" id="hero-preview" aria-hidden="true"></figure>
+          <dl class="tblock" id="hero-block"></dl>
+        </div>
       </div>
     </section>
 
     <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2 id="projects-title">Projects</h2>
-          </div>
+        <div class="section-head">
+          <h2 id="projects-title">Projects</h2>
           <div class="filters" id="filters" role="group" aria-label="Filter projects by category"></div>
         </div>
-        <div class="project-grid" id="project-grid"></div>
-      </div>
-    </section>
-
-    <section class="section" id="wip" aria-labelledby="wip-title">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2 id="wip-title">In progress</h2>
-            <p class="section-sub">Current semester projects. These pages grow as the projects develop.</p>
-          </div>
-        </div>
-        <div class="project-grid wip-grid" id="wip-grid"></div>
+        <div class="parts" id="parts"></div>
       </div>
     </section>
 
     <section class="section" id="other" aria-labelledby="other-title">
       <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2 id="other-title">Other work</h2>
-          </div>
-        </div>
-        <div class="other-grid" id="other-grid"></div>
+        <div class="section-head"><h2 id="other-title">Other work</h2></div>
+        <div class="other-list" id="other-list"></div>
       </div>
     </section>
 
     <section class="section" id="experience" aria-labelledby="exp-title">
       <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2 id="exp-title">Experience</h2>
-          </div>
-        </div>
-        <div class="timeline" id="timeline"></div>
+        <div class="section-head"><h2 id="exp-title">Experience</h2></div>
+        <table class="sheet-table">
+          <thead><tr><th scope="col">Period</th><th scope="col">Role</th><th scope="col">Notes</th></tr></thead>
+          <tbody id="timeline"></tbody>
+        </table>
       </div>
     </section>
 
     <section class="section" id="skills" aria-labelledby="skills-title">
       <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2 id="skills-title">Skills &amp; tools</h2>
-          </div>
-        </div>
-        <div class="skills-grid" id="skills-grid"></div>
+        <div class="section-head"><h2 id="skills-title">Skills &amp; tools</h2></div>
+        <table class="sheet-table">
+          <thead><tr><th scope="col">Group</th><th scope="col">Items</th></tr></thead>
+          <tbody id="skills-body"></tbody>
+        </table>
       </div>
     </section>
 
     <section class="section" id="about" aria-labelledby="about-title">
-      <div class="container about-grid">
-        <div class="reveal">
-          <h2 id="about-title" style="font-size:var(--fs-2xl)">About me</h2>
-          <div class="about-meta" id="about-meta" style="margin-top:var(--space-6)"></div>
+      <div class="container">
+        <div class="section-head"><h2 id="about-title">About me</h2></div>
+        <div class="about-grid">
+          <div class="about-text" id="about-text"></div>
+          <dl class="tblock" id="about-meta"></dl>
         </div>
-        <div class="about-text reveal" id="about-text"></div>
       </div>
     </section>
 
     <section class="section" id="contact" aria-labelledby="contact-title">
       <div class="container">
-        <div class="contact-box reveal">
-          <h2 id="contact-title">Contact</h2>
-          <p>I am open to internships and game projects. Email or LinkedIn is the quickest way to reach me.</p>
+        <div class="contact-sheet">
+          <div>
+            <h2 id="contact-title">Let's talk</h2>
+            <p>I'm open to internships and game projects. Email or LinkedIn is the quickest way to reach me.</p>
+          </div>
           <div class="contact-actions" id="contact-actions"></div>
         </div>
       </div>
@@ -146,7 +130,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <span>© <span data-year></span> Niklas Lang</span>
+      <span>© <span data-year></span> Niklas Lang · Cologne</span>
       <div class="footer-links" id="footer-links">
         <a href="privacy.html">Privacy</a>
       </div>

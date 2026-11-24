@@ -16,7 +16,8 @@ js/project.js     Renders a project page
 data/site.json    Name, tagline, links, email, about text, experience, skills
 data/projects.json  All projects
 assets/<id>/      Images per project (WebP, max. 1920 px wide)
-assets/fonts/     Self-hosted fonts (Inter, Space Grotesk, JetBrains Mono – SIL OFL)
+assets/fonts/     Self-hosted fonts (Archivo variable with width axis, JetBrains Mono – SIL OFL)
+404.html          Page not found (uses absolute paths, GitHub Pages serves it for every missing URL)
 ```
 
 ## Run locally
@@ -52,7 +53,10 @@ Then every TODO text, TODO link and section without real content disappears auto
    - `categories` – drive the filter buttons
    - `media.cover` / `media.gallery` – image objects: `{ "src", "alt", "pixel" }`
      (`pixel: true` keeps pixel art crisp; optional `position` like `"center 30%"` for the card crop)
-   - `media.loop` – optional short MP4/WebM that plays when hovering the card
+   - `media.callouts` – optional numbered labels on the cover: `[{ "x", "y", "label" }]`, x/y in % of the image.
+     The first featured project is FIG. 1 on the home page; with callouts the project page shows them too
+   - `revisions` – optional version line: `[{ "v", "date", "now" }]`, the entry with `"now": true` gets the marker
+   - `media.loop` – optional short MP4/WebM that plays when hovering the project row
    - `media.video.youtubeId` – optional, shown on the project page (loads only after a click)
    - `breakdown` – optional steps with text and images
    - `stats` – optional, `modrinthSlug` fetches live download numbers

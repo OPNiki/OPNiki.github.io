@@ -10,7 +10,7 @@
 
 /* Set to false before you go live: every "TODO…" text, link and empty
    section then disappears instead of being shown as a yellow TODO pill. */
-const SHOW_TODOS = true;
+const SHOW_TODOS = false;
 
 /* true if the visitor asked the OS for less motion */
 const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -42,6 +42,8 @@ function h(tag, attrs = {}, ...children) {
     if (v === null || v === undefined || v === false) continue;
     if (k.startsWith("on") && typeof v === "function") el.addEventListener(k.slice(2), v);
     else if (k === "html") el.innerHTML = v;
+    // the muted attribute alone does not mute a video created from JS – set the property too
+    else if (k === "muted") { el.muted = true; el.setAttribute("muted", ""); }
     else el.setAttribute(k, v === true ? "" : v);
   }
   for (const c of children.flat()) {
@@ -90,6 +92,81 @@ function isPortrait(src) {
     i.onerror = () => resolve(false);
     i.src = src;
   });
+}
+
+/* ---------- Figure with callouts ----------
+   media = cover object, callouts = [{ x, y, label }] with x/y in % of the image.
+   Numbered markers sit on the image, labels in a column beside it, and an SVG
+   draws a leader line from each marker to its label (hidden on narrow screens,
+   where the labels become a numbered legend). Hover/focus on a label lights its
+   marker and line. */
+function calloutFigure(media, callouts, { title = "", caption = "", meta = "", eager = false, extra = null } = {}) {
+  // left-to-right by marker, so leader lines never cross
+  const list = (callouts || []).filter((c) => hasContent(c.label)).sort((a, b) => a.x - b.x);
+  const stage = h("div", { class: "fig-stage" }, extra || img(media, { title, eager }));
+  const fig = h("figure", { class: list.length ? "fig" : "fig fig--plain" }, stage);
+  if (!list.length) {
+    if (caption) fig.append(h("figcaption", { class: "fig-caption" }, h("span", {}, caption), h("span", {}, meta)));
+    return fig;
+  }
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "fig-lines"); svg.setAttribute("aria-hidden", "true");
+  const labels = h("ol", { class: "fig-labels", "aria-label": "Callouts" });
+  const parts = list.map((c, i) => {
+    const marker = h("span", { class: "fig-marker", "aria-hidden": "true", style: `left:${c.x}%;top:${c.y}%` }, String(i + 1));
+    const label = h("li", { class: "fig-label", tabindex: "0" }, h("b", {}, String(i + 1)), h("span", {}, c.label));
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("pathLength", "1");
+    path.style.setProperty("--i", i);
+    stage.append(marker); labels.append(label); svg.append(path);
+    const on = (v) => [marker, label, path].forEach((el) => el.classList.toggle("is-on", v));
+    ["pointerenter", "focus"].forEach((ev) => label.addEventListener(ev, () => on(true)));
+    ["pointerleave", "blur"].forEach((ev) => label.addEventListener(ev, () => on(false)));
+    return { marker, label, path };
+  });
+  fig.append(labels, svg);
+  if (caption) fig.append(h("figcaption", { class: "fig-caption" }, h("span", {}, caption), h("span", {}, meta)));
+
+  // leader lines: from the marker's lower edge, angled down to just above
+  // the label, then straight into the label's top edge
+  const draw = () => {
+    const box = fig.getBoundingClientRect();
+    parts.forEach(({ marker, label, path }) => {
+      const m = marker.getBoundingClientRect(), l = label.getBoundingClientRect();
+      const x1 = m.left + m.width / 2 - box.left, y1 = m.bottom - box.top;
+      const x2 = l.left + 18 - box.left, y2 = l.top - box.top;
+      path.setAttribute("d", `M${x1},${y1} L${x2},${y2 - 12} L${x2},${y2}`);
+    });
+  };
+  new ResizeObserver(draw).observe(fig);
+  const image = stage.querySelector("img");
+  if (image && !image.complete) image.addEventListener("load", draw, { once: true });
+  if (!REDUCED_MOTION) fig.classList.add("drawing");
+  return fig;
+}
+
+/* ---------- Revision line: [{ v, date, now }] – the item with now:true gets the marker ---------- */
+function revisionLine(revs, className = "") {
+  const list = (revs || []).filter((r) => hasContent(r.v));
+  if (!list.length) return null;
+  return h("ol", { class: `revs ${className}`.trim(), "aria-label": "Versions" },
+    list.map((r) => h("li", { class: r.now ? "now" : null, "aria-current": r.now ? "step" : null },
+      h("strong", {}, r.v), r.date || "")));
+}
+
+/* ---------- Client / partner logo: { label, logo: { src, alt } } ---------- */
+function partnerLogo(pt) {
+  if (!pt || !pt.logo || !isLink(pt.logo.src)) return null;
+  return h("div", { class: "partner" },
+    h("span", { class: "k" }, pt.label || "Partners"),
+    h("img", { src: pt.logo.src, alt: pt.logo.alt || "", loading: "lazy", decoding: "async" }));
+}
+
+/* ---------- Status tag ---------- */
+function statusTag(p) {
+  if (p.status === "coming-soon") return h("span", { class: "tag soon" }, p.statusNote || "In progress");
+  if (p.status === "in-development") return h("span", { class: "tag" }, p.statusNote || "In development");
+  return null;
 }
 
 /* ---------- Icons (inline SVG, inherit currentColor) ---------- */

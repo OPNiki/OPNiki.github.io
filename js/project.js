@@ -38,12 +38,18 @@ async function renderProject(root, p, featured) {
   /* --- Title area --- */
   root.append(h("header", { class: "project-hero" },
     h("a", { class: "back-link", href: "index.html#projects" }, icon("arrow"), "All projects"),
-    h("div", { class: "project-title-row reveal" }, h("h1", {}, txt(p.title)), projectBadge(p)),
-    h("p", { class: "project-tagline reveal" }, txt(p.tagline)),
-    h("div", { class: "chips project-chips reveal" }, (p.tech || []).filter(hasContent).map((t) => h("span", { class: "chip" }, txt(t))))));
+    h("div", { class: "project-title-row" }, h("h1", {}, txt(p.title)), statusTag(p)),
+    h("p", { class: "project-tagline" }, txt(p.tagline)),
+    h("p", { class: "tech" }, (p.tech || []).filter(hasContent).join(" · "))));
 
-  /* --- Hero media: YouTube (click to load) > loop video > cover > placeholder --- */
-  root.append(h("div", { class: "reveal" }, await heroMedia(p, media)));
+  /* --- Hero: cover with callouts if the project has them, otherwise
+         YouTube (click to load) > loop video > cover > placeholder --- */
+  const hasCallouts = media.cover && media.cover.src && (media.callouts || []).length;
+  root.append(h("div", { class: "project-figure" }, hasCallouts
+    ? calloutFigure(media.cover, media.callouts, { title: p.title, eager: true, caption: `Fig. 1 · ${p.title}`, meta: (p.tech || []).join(" · ") })
+    : await heroMedia(p, media)));
+  const revs = revisionLine(p.revisions, "project-revs");
+  if (revs) root.append(revs);
 
   /* --- Main column + sticky aside --- */
   const main = h("div", { class: "project-main" });
@@ -51,10 +57,10 @@ async function renderProject(root, p, featured) {
   root.append(h("div", { class: "project-layout" }, main, aside));
 
   // aside: facts, stats, links
-  aside.append(...[factsBox(p.facts), statsBox(p.stats), linksBox(p)].filter(Boolean));
+  aside.append(...[factsBox(p.facts), partnerLogo(p.partners), statsBox(p.stats), linksBox(p)].filter(Boolean));
 
   if (p.status === "coming-soon") {
-    main.append(h("div", { class: "wip-note reveal" }, h("span", { class: "badge soon" }, "WIP"),
+    main.append(h("div", { class: "wip-note reveal" }, h("span", { class: "tag soon" }, "WIP"),
       "This is a work in progress. More details and media will follow as the project develops."));
   }
 
@@ -63,6 +69,9 @@ async function renderProject(root, p, featured) {
     block("What I built", "02", builtList(p.built)),
     flowBlock(p.flow),
     block("Challenge & solution", "03", hasContent(p.challenge) ? h("p", { class: "prose callout" }, txt(p.challenge)) : null),
+    // trailer with sound: never autoplays, the visitor starts it
+    isLink(media.trailer) ? block("Trailer", "", h("div", { class: "media-frame" },
+      h("video", { src: media.trailer, controls: true, preload: "none", playsinline: true, poster: media.cover && media.cover.src, "aria-label": `${p.title} trailer` }))) : null,
     snippetsBlock(p.snippets),
     devlogBlock(p.devlog),
     breakdownBlock(p.breakdown),
@@ -89,12 +98,6 @@ async function renderProject(root, p, featured) {
       navLink(next, "Next project", "next")));
   }
   root.append(h("div", { style: "height:var(--space-9)" }));
-}
-
-function projectBadge(p) {
-  if (p.status === "coming-soon") return h("span", { class: "badge soon" }, p.statusNote || "Coming soon");
-  if (p.status === "in-development") return h("span", { class: "badge" }, p.statusNote || "In development");
-  return null;
 }
 
 /* A section with heading; returns null when it has no content */
@@ -232,7 +235,9 @@ async function galleryBlock(gallery, title) {
 }
 
 function thumbGrid(images, all, offset) {
-  return h("div", { class: "gallery" }, images.map((m, i) =>
+  const n = images.length;
+  const cols = n <= 2 ? n : n % 3 === 0 ? 3 : n % 2 === 0 ? 2 : 3;
+  return h("div", { class: "gallery", style: `--cols:${cols}` }, images.map((m, i) =>
     h("button", { class: "gallery-item", type: "button", "aria-label": `Enlarge: ${m.alt || "image"}`, onclick: () => Lightbox.open(all, offset + i) },
       img(m, {}))));
 }

@@ -9,17 +9,17 @@
   <meta property="og:description" content="Gameplay systems, 3D pipelines, mods and game jam projects.">
   <meta property="og:url" content="https://opniki.github.io/">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://opniki.github.io/assets/camping-diorama/cover.webp">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233ddbd9'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' text-anchor='middle' fill='%23062625'%3ENL%3C/text%3E%3C/svg%3E">
-  <link rel="preload" href="assets/fonts/space-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <meta property="og:image" content="https://opniki.github.io/assets/og.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23121517'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' text-anchor='middle' fill='%233ddbd9'%3E%3Enl%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Set the theme before first paint, so there is no flash of the wrong theme -->
   <script>
     (function () {
       var t = null;
       try { t = localStorage.getItem("theme"); } catch (e) {}
-      if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      if (!t) t = "dark"; // dark by default, the toggle switches to the light sheet
       document.documentElement.setAttribute("data-theme", t);
+      document.documentElement.classList.add("js");
     })();
   </script>
   <link rel="stylesheet" href="css/style.css">
@@ -29,7 +29,7 @@
 
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="index.html" aria-label="Niklas Lang, home"><span class="brand-mark">NL</span><span>Niklas Lang</span></a>
+      <a class="brand" href="index.html" aria-label="Niklas Lang, home"><span class="brand-mark" aria-hidden="true">&gt;nl</span><span>Niklas Lang</span></a>
       <nav class="nav" id="nav" aria-label="Main">
         <a href="index.html#projects">Projects</a>
         <a href="index.html#experience">Experience</a>
@@ -53,7 +53,7 @@
       <h1>Privacy</h1>
       <p>This is the private portfolio of Niklas Lang. It doesn't sell anything and doesn't offer paid services.</p>
       <h2>What this site does not do</h2>
-      <p>No cookies, no tracking and no analytics. Fonts are stored on this server, so no font service is contacted. Your theme choice (light or dark) is saved only in your own browser.</p>
+      <p>No cookies, no tracking and no analytics. Fonts are stored on this server, so no font service is contacted. Your theme choice (dark or light) is saved only in your own browser.</p>
       <h2>Hosting</h2>
       <p>The site is hosted on GitHub Pages. GitHub may process technical access data such as your IP address to deliver the pages. More in the <a class="text-link" href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub privacy statement</a>.</p>
       <h2>External content</h2>
@@ -67,6 +67,9 @@
     <div class="container">
       <span>© <span data-year></span> Niklas Lang</span>
       <div class="footer-links" id="footer-links">
+        <a href="https://opniki.itch.io/" target="_blank" rel="noopener">itch.io</a>
+        <a href="https://github.com/OPNiki" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/niklas-lang-9ab7a83b3/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="privacy.html">Privacy</a>
       </div>
     </div>
